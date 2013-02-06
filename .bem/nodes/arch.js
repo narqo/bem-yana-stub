@@ -11,9 +11,10 @@ process.env[GLOBAL_ROOT_NAME] ||
     (process.env[GLOBAL_ROOT_NAME] = PATH.dirname(__dirname));
 
 
-var environ = require('../environ');
+var environ = require('../environ'),
+    registry = require('bem/lib/nodesregistry');
 
-require('bem/lib/nodesregistry').decl('Arch', {
+registry.decl('Arch', {
 
     /**
      * Задает список необходимых библиотек
@@ -47,6 +48,24 @@ require('bem/lib/nodesregistry').decl('Arch', {
         var libs = this.libraries;
         return Array.isArray(libs)?
                 this.useLibraries(libs) : libs;
+
+    },
+
+    /**
+     * @returns {Array}
+     * @override
+     */
+    createBlockLibrariesNodes : function() {
+
+        var libs = this.__base.apply(this, arguments),
+            libsNodeName = environ.LIB_DIR;
+
+        if(libsNodeName && libsNodeName !== '.') {
+            var node = new (registry.getNodeClass('Node'))(libsNodeName);
+            this.arch.setNode(node, null, libs);
+        }
+
+        return libs;
 
     }
 
