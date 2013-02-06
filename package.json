@@ -1,17 +1,16 @@
 {
   "author": "",
   "name": "bem-project-stub",
-  "version": "0.0.2",
+  "version": "0.2.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/narqo/bem-project-stub.git"
   },
   "engines": {
-    "node": ">= 0.6"
+    "node": ">=0.6"
   },
-  "dependencies": {
+  "devDependencies": {
     "bem" : "~0.5.23"
   },
-  "devDependencies": {},
   "private": true
 }
