@@ -7,6 +7,6 @@ vendor
 .svn
 .bem/cache
 .bem/snapshots
-desktop.bundles/*/*.*
-!desktop.bundles/*/*.bemjson.js
-!desktop.bundles/.bem/*
+*.bundles/*/*.*
+!*.bundles/.bem/*
+!*.bundles/*/*.bemdecl.js

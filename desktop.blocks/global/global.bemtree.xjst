@@ -1,0 +1,32 @@
+this._start, !this.data {
+
+    default: {
+        return applyCtx(
+                this.data = this.ctx,
+                this.ctx = [
+                    { block : 'global' },
+                    {
+                        block : 'page',
+                        content: [
+                            { block : 'header' },
+                            { block : 'body' },
+                            { block : 'footer' }
+                        ]
+                    }
+                ]
+            );
+    }
+
+}
+
+block global {
+
+    content: [
+        {
+            params : {
+                'static-host' : this.data['static-host'],
+                'login' : this.data['login']
+            }
+        }
+    ]
+}

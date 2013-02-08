@@ -1,9 +1,9 @@
-Minimal configs and folders to start BEM project
-================================================
+Yat Another Node Application Stub done BEM
+==========================================
 
 ### Usage
 
-    › git clone git://github.com/narqo/bem-project-stub.git project
+    › git clone git://github.com/narqo/bem-yana-stub.git project
     › cd project
     › npm install
     › bem server

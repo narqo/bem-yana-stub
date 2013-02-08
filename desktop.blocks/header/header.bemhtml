@@ -1,0 +1,8 @@
+block header {
+
+    content: {
+        elem : 'wrap',
+        content : this.ctx.content
+    }
+
+}

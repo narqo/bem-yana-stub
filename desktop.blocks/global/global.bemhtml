@@ -1,0 +1,7 @@
+block global {
+
+    default: {}
+
+    this.elem: ''
+
+}

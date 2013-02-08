@@ -1,0 +1,22 @@
+block page {
+
+    doctype: '<!DOCTYPE html>'
+
+    default: {
+        var doctype = apply('doctype'),
+            page = [
+                doctype,
+                {
+                    tag : 'html',
+                    content : [
+                        { tag : 'head' },
+                        { tag : 'body', content: this.ctx }
+                    ]
+                }
+            ];
+
+        return applyCtx(page);
+
+    }
+
+}

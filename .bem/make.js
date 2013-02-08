@@ -16,11 +16,21 @@ MAKE.decl('Arch', {
 MAKE.decl('BundleNode', {
 
     getTechs: function() {
+        if(~this.getNodePrefix().indexOf('desktop.bundles')) {
+            return [
+                'bemdecl.js',
+                'deps.js',
+                'i18n',
+                'bemhtml',
+                'i18n.bemtree.xjst',
+                'node.js'
+            ];
+        }
+
         return [
             'bemjson.js',
             'bemdecl.js',
             'deps.js',
-            'bemhtml.js',
             'js',
             'css',
             'ie.css',
@@ -28,8 +38,21 @@ MAKE.decl('BundleNode', {
             'ie7.css',
             'ie8.css',
             'ie9.css',
+            'bemhtml',
             'html'
         ];
+    },
+
+    'create-node.js-optimizer-node' : function(tech, sourceNode, bundleNode) {
+        return this['create-js-optimizer-node'].apply(this, arguments);
+    },
+
+    'create-bemtree.xjst-optimizer-node' : function(tech, sourceNode, bundleNode) {
+        return this['create-js-optimizer-node'].apply(this, arguments);
+    },
+
+    'create-bemtree.i18n.xjst-optimizer-node' : function(tech, sourceNode, bundleNode) {
+        return this['create-js-optimizer-node'].apply(this, arguments);
     }
 
 });
