@@ -6,12 +6,13 @@ Yat Another Node Application Stub done BEM
     › git clone git://github.com/narqo/bem-yana-stub.git project
     › cd project
     › npm install
-    › bem server
+    › bem make
+    › npm start
 
-    Navigate to http://localhost:8080/desktop.bundles/index/index.html
+This will install localy all project's dependencies from npm and build all the stuff.
+With `npm start` local dev server will fire up under HTTP port `3000`. So you could navigate to `http://localhost:3000/`.
 
-This will install localy all project's dependencies from npm and starts local `bem server`
-under HTTP port `8080`. So you could navigate to http://localhost:8080/desktop.bundles/index/index.html.
+Query parameter `?_mode=json` is used to see BEMJSON stuff.
 
 **NOTE:** `bem` should be in your `PATH` environment variable. You could do this by adding this line to your user's
 `.profile` config:
