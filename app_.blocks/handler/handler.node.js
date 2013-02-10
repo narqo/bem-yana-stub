@@ -1,4 +1,4 @@
-App.resource = inherit({
+App.decl('handler', {
 
     __constructor : function(path, req, res) {
         this._path = path;

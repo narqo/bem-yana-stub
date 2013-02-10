@@ -1,5 +1,6 @@
 ({
     mustDeps : [
+        { block : 'i-promise' },
         { block : 'app' },
         { block : 'config' }
     ],

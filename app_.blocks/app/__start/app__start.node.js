@@ -15,24 +15,13 @@ App.start = function(/* TODO: env */) {
                 rule : '/album/{album-id}/view/{photo-id}',
                 resource : 'photo'
             }
-        ],
-        // TODO
-        params = {
-            'album-id' : '\d+'
-        };
+        ];
 
-    var router = App.router.create(routes, params),
-        server = App.http.create();
+    var server = App.http.create(),
+        route = App.router.create(routes);
 
-    /*
-    server.use(function() {
-        console.log('Custom handler!');
-        throw "Error Error Error";
-    });
-    */
-
-    server.use(router.requestHandler());
-//        .use(App.datasrc.create());
+    server.use(App.request.normalize);
+    server.use(route);
 
     server.startServer();
 };
