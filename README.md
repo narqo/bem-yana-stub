@@ -1,4 +1,4 @@
-Yat Another Node Application Stub done BEM
+Yet Another Node Application Stub done BEM
 ==========================================
 
 ### Usage
