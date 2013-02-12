@@ -1,4 +1,4 @@
-App.HttpError = inherit(Error, {
+App.HttpError = inherit(App.Error, {
 
     __constructor : function(code, message) {
         this.code = code;

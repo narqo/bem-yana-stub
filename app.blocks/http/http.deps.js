@@ -4,7 +4,7 @@
         { block : 'config' }
     ],
     shouldDeps : [
-        { elem : 'request' },
-        { elem : 'error' }
+        { block : 'error', mods : { type : 'error' } },
+        { block : 'logger' }
     ]
 })

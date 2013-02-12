@@ -1,1 +1,3 @@
-App.start = function() {};
+App.start = function() {
+    // do something;
+};
