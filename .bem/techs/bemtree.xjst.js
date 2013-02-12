@@ -8,7 +8,7 @@ exports.baseTechName = 'bemhtml';
 exports.techMixin = {
 
     getSuffixes : function() {
-        return ['bemtree.xjst'];
+        return ['common.js', 'bemtree.xjst'];
     },
 
     getBuildSuffixes : function() {
