@@ -12,8 +12,9 @@ exports.getConfig = function() {
             ]
             .map(environ.getLibPath.bind(null, 'bem-bl'))
             .concat(this.resolvePaths([
-                '../../app.blocks',
                 '../../common.blocks',
+                '../../app.blocks',
+                '../../site.blocks',
                 '../../desktop.blocks'
             ]))
 

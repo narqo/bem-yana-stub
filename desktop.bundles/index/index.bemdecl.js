@@ -1,4 +1,4 @@
 exports.blocks = [
-    { block : 'app', elems : ['start', 'init'] },
-    { block : 'global' }
+    { block : 'page', mods : { 'action' : 'index' } },
+    { block : 'global' },
 ];
