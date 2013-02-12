@@ -1,48 +1,22 @@
-App.page = inherit(App.page, {
+App.View.decl('page', {
 
-    // FIXME: hardcode
-    _view : require('./index.bemtree.xjst'),
+    __constructor : function() {
+        this.__base.apply(this, arguments);
 
-    handleRequest : function() {
-        this.log('å processing request');
-
-        var ctx = this._createContext();
-        return Vow.when(this.run.call(this, ctx), function(page) {
-            return page;
-        });
+        this._template = this._getTemplate();
     },
 
-    run : function(ctx) {
-        this.log('å page handler is runnig with ctx');
+    _getTemplate : function() {
+        var name = this.__self.getName(),
+            template = name + '.bemtree.xjst';
 
-        var bemJsonP = this._getBemjson(ctx),
-            mode = this._getMode();
+        App.Logger.log('Trying template "%s"', template);
 
-        if(mode === 'json') {
-            return bemJsonP.then(this._returnJson.bind(this));
-        }
-
-        return bemJsonP.then(this._getHtml.bind(this));
+        return require('./' + template);
     },
 
-    _getBemjson : function(ctx) {
-        var defer = Vow.promise();
-        this._view.BEMTREE.call(ctx, { callback : function(bemjson) {
-            return defer.fulfill(bemjson);
-        }});
-        return defer;
-    },
-
-    _getHtml : function(data) {
-        this._res.setHeader('Content-Type', 'text/html; charset=utf-8');
-        return this._view.BEMHTML.apply(data);
-    },
-
-    _returnJson : function(data) {
-        this.log('%j', data)
-        this._res.statusCode = 200;
-        this._res.setHeader('Content-Type', 'text/json; charset=utf-8');
-        return JSON.stringify(data, null, '  ');
+    render : function(ctx) {
+        App.Logger.log('å page handler is runnig with ctx');
     }
 
 });
