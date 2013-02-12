@@ -1,9 +1,31 @@
-App.Http = {
+App.Http = inherit({
 
-    _http : require('http'),
+    __constructor : function() {
+        this._stack = [];
+
+        this
+            ._loadMiddlewares()
+            ._createServer();
+    },
+
+    start : function(port) {
+        App.Logger.log('Server started on port %d', port);
+        this._server.listen(port);
+    },
+
+    stop : function() {
+        // TODO?
+    },
+
+    _stack : [],
+
+    _loadMiddlewares : function() {
+        this._stack = App.Config.param('REQUEST_PROCESSORS');
+        return this;
+    },
 
     _onRequest : function(req, res) {
-        App.Logger.log('\nRequest for "%s" received', pathname);
+        App.Logger.log('\nRequest for "%s" received', req.url);
 
         var stack = this._stack;
 
@@ -34,22 +56,11 @@ App.Http = {
 
     _createServer : function() {
         this._server ||
-            (this._server = this._http.createServer(this._onRequest.bind(this)));
-    },
-
-    create : function() {
-        this._createServer();
-    },
-
-    use : function(fn) {
-        this._stack.push(fn);
-        return this;
-    },
-
-    start : function(port) {
-        App.Logger.log('Server started on port %d', port);
-
-        this._server.listen(port);
+            (this._server = this.__self._http.createServer(this._onRequest.bind(this)));
     }
 
-};
+}, {
+
+    _http : require('http')
+
+});
