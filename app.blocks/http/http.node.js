@@ -37,7 +37,7 @@ App.Http = inherit({
             }
 
             try {
-                stack[i].call(this, req, res);
+                stack[i](req, res);
             } catch(e) {
                 this._onError(req, res, e);
                 return;
