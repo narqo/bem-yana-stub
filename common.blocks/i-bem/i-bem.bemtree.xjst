@@ -87,6 +87,7 @@ BEMContext.prototype.pause = function() {
 };
 
 BEMContext.prototype.resume = function(ctx, fn) {
+    // should we `throw`?
     if(!this._globalThread)
         throw new Error('Can\'t in resume synchronous call');
 
@@ -120,8 +121,9 @@ exports.apply = BEMContext.apply = function _apply() {
 };
 
 exports.applyAsync = BEMContext.applyAsync = function(fn) {
-    if(!fn)
+    if(!fn) {
         return BEMContext.apply.call(this);
+    }
 
     var result,
         thread = {
@@ -138,7 +140,7 @@ exports.applyAsync = BEMContext.applyAsync = function(fn) {
 
     result = ctx.apply();
 
-    if(thread.count === 0)
+    thread.count === 0 &&
         thread.callback();
 };
 
