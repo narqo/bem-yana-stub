@@ -15,7 +15,8 @@ exports.getConfig = function() {
                 '../../common.blocks',
                 '../../app.blocks',
                 '../../site.blocks',
-                '../../desktop.blocks'
+                '../../desktop.blocks',
+                '../../configure.blocks'
             ]))
 
     });
