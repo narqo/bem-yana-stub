@@ -47,14 +47,13 @@ exports.techMixin = {
             bemhtmlName = this.getBemhtmlVar();
 
         // FIXME: ugly
-        var bemtreeAsync = bemtree
-            .replace(/xjst\.apply\.call\(([^,]+?)\);/m, 'xjst.applyAsync.call($1,options.callback);');
+        var bemtreeAsync = bemtree.replace(/xjst\.apply\.call\(([^,]+?)\);/m,
+                'xjst.applyAsync.call($1,options.callback);');
 
         return [
             'var main = function(data) {',
             bemtreeAsync.replace(/BEMHTML/g, bemtreeName),  // FIXME: ugly hack!
             bemhtml,
-//            U.format('return %s.apply(%s.apply(data));', bemhtmlName, bemtreeName),
             U.format('return { %s : %s, %s: %s }', bemhtmlName, bemhtmlName, bemtreeName, bemtreeName),
             '};',
             'typeof module === "undefined" || (module.exports = main());'
