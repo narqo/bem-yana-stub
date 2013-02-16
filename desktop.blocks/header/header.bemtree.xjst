@@ -7,13 +7,47 @@ block header {
     content: {
         return {
             elem : 'title',
-            content : BEM.I18N('header', 'welcome')
+            content : 'welcome' //BEM.I18N('header', 'welcome')
         };
+    }
+
+    elem title-wrap, content: {
+        return {
+            block : 'login',
+            content : this.ctx.content
+        }
     }
 
     elem title {
 
-        content, !this.ctx._wait: {
+        content, !this.ctx._pause: {
+//            var ctx = this.pause();
+
+            dump(this, '<- before P request');
+
+//            doRequestP()
+//                .then(function(data) {
+//
+//                    this.resume(ctx, function() {
+//                        dump(this, '<- after P request');
+//
+//                        this.ctx.content = applyCtx({ elem : 'title-wrap', content : 'Hello!' });
+//                    });
+//
+//                }.bind(this))
+//                .done();
+
+            doRequestP()
+                .then(this.applyAsync(function(data) {
+                    dump(this, '<- after P request');
+
+                    this.ctx.content = applyCtx({ elem : 'title-wrap', content : 'Hello!' });
+                }))
+                .done();
+
+        }
+
+        bcontent, !this.ctx._wait: {
             // TODO: api
             var _t    = this,
                 ctx   = _t.ctx,
@@ -37,11 +71,10 @@ block header {
                         this.ctx = ctx,
                         this.ctx.content = {
                             elem : 'title-wrap',
-                            content : BEM.I18N('header', 'welcome')
+                            content : 'Hello@'
                         },
                         this._mode = '') {
 
-                            log(data);
                             dump(this, '<- after P request');
 
                             this.apply();
