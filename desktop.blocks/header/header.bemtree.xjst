@@ -11,91 +11,66 @@ block header {
         };
     }
 
-    elem title-wrap, content: {
-        return {
-            block : 'login',
-            content : this.ctx.content
-        }
-    }
-
     elem title {
 
         content, !this.ctx._pause: {
-//            var ctx = this.pause();
-
             dump(this, '<- before P request');
 
+            /**
+             * XXX: короткий вариант
+             * не работает для случая, если нужен errback-вызов
+             */
 //            doRequestP()
-//                .then(function(data) {
+//                .then(this.applyAsync(function(data) {
+//                    dump(this, '<- after P request');
 //
-//                    this.resume(ctx, function() {
-//                        dump(this, '<- after P request');
-//
-//                        this.ctx.content = applyCtx({ elem : 'title-wrap', content : 'Hello!' });
-//                    });
-//
-//                }.bind(this))
+//                    this.ctx.content = applyCtx({ elem : 'title-wrap', content : 'Hello!' });
+//                ))
 //                .done();
 
+            var ctx = this.pause();
+
             doRequestP()
-                .then(this.applyAsync(function(data) {
+                .then(this.resume.bind(this, ctx, function(data) {
                     dump(this, '<- after P request');
 
-                    this.ctx.content = applyCtx({ elem : 'title-wrap', content : 'Hello!' });
+                    this.ctx.content = apply(
+                            this._smsResults = data,
+                            this._mode = '',
+                            this.ctx = {
+                                elem : 'title-wrap',
+                                content : 'Hello!'
+                            });
+                }))
+                .fail(this.resume.bind(this, ctx, function(err) {
+                    dump(this, '<- after P request fail!');
+
+                    apply();
                 }))
                 .done();
 
         }
 
-        bcontent, !this.ctx._wait: {
-            // TODO: api
-            var _t    = this,
-                ctx   = _t.ctx,
-                block = _t.block,
-                elem  = _t.elem,
-                bmods = _t.mods,
-                emods = _t.elemMods;
+    }
 
-            dump(_t, '<- before P request');
+    elem title-wrap, content {
 
-            ctx._wait = true;
-            _t._globalThread.count++;
+        this.ctx.data: [
+            {
+                block : 'results',
+                content : this.ctx.data
+            },
+            this.ctx.content
+        ]
 
-            doRequestP()
-                .then(function(data) {
-                    local(
-                        this.block = block,
-                        this.elem = elem,
-                        this.mods = bmods,
-                        this.elemMods = emods,
-                        this.ctx = ctx,
-                        this.ctx.content = {
-                            elem : 'title-wrap',
-                            content : 'Hello@'
-                        },
-                        this._mode = '') {
-
-                            dump(this, '<- after P request');
-
-                            this.apply();
-
-                            this._globalThread.count--;
-
-                            if(this._globalThread.count === 0) {
-                                this._globalThread.callback();
-                            }
-
-                        }
-
-                }.bind(_t))
-                .done();
-
-            apply();
+        this._smsResults: {
+            return applyNext(this.ctx.data = this._smsResults);
         }
 
     }
 
 }
+
 
 function doRequestP() {
     var body = '',
@@ -112,8 +87,8 @@ function doRequestP() {
             log('request end');
 
             setTimeout(function() {
-                log('forced timeout end :)');
-                defer.fulfill(body);
+                // XXX: ручка отдает невалидный JSON — фиксим ;)
+                defer.fulfill(JSON.parse(body.slice(1, -1)));
             }, 500);
         });
 
