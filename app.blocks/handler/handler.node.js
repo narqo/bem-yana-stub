@@ -1,13 +1,11 @@
-App.Handler = inherit({
+App.Handler = inherit(App.Router, {
 
-    __constructor : function(routes) {
-        this._router = new App.Router(routes);
-
+    run : function() {
         return this._handleRequest.bind(this);
     },
 
     _handleRequest : function(req, res) {
-        var route = this._router.dispatch(req);
+        var route = this.dispatch(req);
 
         App.Logger.log('%j', route);
 
@@ -16,15 +14,11 @@ App.Handler = inherit({
             return;
         }
 
-        this.handleRequest.call(this, req, res, route);
-    },
-
-    _getViewClass : function() {
-        return App.View;
+        return this.handleRequest.call(this, req, res, route);
     },
 
     handleRequest : function(req, res, route) {
-        this._getViewClass()
+        this.__self._getViewClass()
             .create(route.action, req, res, route.path, route.params)
             ._run();
     },
@@ -36,6 +30,12 @@ App.Handler = inherit({
 
     handle500 : function(req, res) {
         throw new App.HttpError(500, 'Temporarily unavailable.');
+    }
+
+}, {
+
+    _getViewClass : function() {
+        return App.View;
     }
 
 });

@@ -1,9 +1,9 @@
 ({
     mustDeps : [
-        { block : 'app' }
+        { block : 'app' },
+        { block : 'router' }
     ],
     shouldDeps : [
-        { block : 'router' },
         { block : 'view' },
         { block : 'http', elem : 'error' }
     ]

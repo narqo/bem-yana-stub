@@ -46,6 +46,10 @@ App.Router = inherit({
         return resource;
     },
 
+    addRoute : function(route) {
+        this._routes.push(this.__self._parseRoute(route));
+    },
+
     _routes : []
 
 }, {
@@ -57,11 +61,13 @@ App.Router = inherit({
     },
 
     _parse : function(routes) {
-        return routes.map(function(route) {
-            route.regexp = this._compile(route.rule);
-            route.action = this._getRouteAction(route.action);
-            return route;
-        }, this);
+        return routes.map(this._parseRoute, this);
+    },
+
+    _parseRoute : function(route) {
+        route.regexp = this._compile(route.rule);
+        route.action = this._getRouteAction(route.action);
+        return route;
     },
 
     _compile : function(rule) {
