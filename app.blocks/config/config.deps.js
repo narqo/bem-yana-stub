@@ -1,5 +1,6 @@
 ({
     mustDeps : [
-        { block : 'app' }
+        { block : 'app' },
+        { block : 'util' }
     ]
 })

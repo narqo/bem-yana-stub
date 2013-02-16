@@ -16,7 +16,8 @@ App.Config = inherit({
 
     params : function(params) {
         // FIXME: ugly
-        return this.__env = params;
+        var env = this.__env;
+        return this.__env = App.Util.merge(env, params);
     },
 
     __env : {
