@@ -21,6 +21,7 @@ exports.getTechs = function() {
         'ie8.css'       : 'ie8.css',
         'ie9.css'       : 'ie9.css',
 
+        'common.js'     : '',
         'bemjson.js'    : join(PRJ_TECHS, 'bemjson.js'),
         'node.js'       : join(PRJ_TECHS, 'node.js'),
         'bemtree.xjst'  : join(PRJ_TECHS, 'bemtree.xjst.js'),
