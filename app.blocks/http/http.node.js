@@ -1,6 +1,6 @@
 App.Http = inherit({
 
-    __constructor : function() {
+    __constructor : function(params) {
         this._stack = [];
 
         this
@@ -57,6 +57,13 @@ App.Http = inherit({
     _createServer : function() {
         this._server ||
             (this._server = this.__self._http.createServer(this._onRequest.bind(this)));
+    },
+
+    // TOOD
+    _getDefaultParams : function() {
+        return {
+            'REQUEST_PROCESSORS' : []
+        };
     }
 
 }, {
