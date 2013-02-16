@@ -7,11 +7,11 @@ exports.techMixin = {
     },
 
     getBuildSuffixes : function() {
-        return ['node.js'];
+        return ['common.js', 'node.js'];
     },
 
     getDependencies : function() {
-        return ['i18n.bemtree.xjst'];
+        return ['bemtree.xjst'];
     }
 
 };
