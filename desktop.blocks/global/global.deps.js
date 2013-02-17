@@ -6,6 +6,7 @@
     ],
     shouldDeps : [
         { block : 'page' },
-        { block : 'header' }
+        { block : 'header' },
+        { block : 'body' }
     ]
 })

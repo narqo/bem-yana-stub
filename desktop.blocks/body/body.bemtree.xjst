@@ -1,0 +1,13 @@
+block body {
+
+    default, !this.ctx._pause: {
+
+        setTimeout(this.applyAsync(function() {
+            dump(this, '<- after setTimeout');
+            this.ctx.content = applyCtx({ elem : 'menu', content : 'he11o11' });
+        }), 700);
+
+        return apply();
+    }
+
+}
