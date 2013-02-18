@@ -1,1 +1,1 @@
-// TODO
+require('./arch');

@@ -9,9 +9,8 @@
     "node": ">=0.8"
   },
   "dependencies": {
-    "vow": "~0.1.8",
-    "jaggi": "~0.1.3",
     "inherit": "~1.0.4",
+    "vow": "~0.1.10",
     "cookies": "~0.3.6"
   },
   "devDependencies": {
