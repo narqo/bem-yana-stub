@@ -1,9 +1,11 @@
 ({
     mustDeps : [
+        { block : 'config' },
         { block : 'http' },
-        { block : 'state' },
-        { block : 'handler', mods : { type : 'json' } },
-        { block : 'logger' },
-        { block : 'runtime' }
+        { block : 'logger' }
+    ],
+    shouldDeps : [
+        { block : 'page' },
+        { block : 'page', mods : { action : 'index' } }
     ]
 })
