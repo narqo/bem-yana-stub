@@ -1,4 +1,5 @@
-var BEM = require('bem'),
+var PATH = require('path'),
+    BEM = require('bem'),
     environ = require('../../.bem/environ');
 
 exports.baseLevelPath = require.resolve('../../.bem/levels/blocks.js');
@@ -8,14 +9,15 @@ exports.getConfig = function() {
     return BEM.util.extend(this.__base() || {}, {
 
         bundleBuildLevels : [
-                'blocks-common',
+                'bem-bl/blocks-common',
+                'bem-yana/app.blocks',
+                'bem-yana/common.blocks',
             ]
-            .map(environ.getLibPath.bind(null, 'bem-bl'))
+            .map(PATH.resolve.bind(null, environ.LIB_ROOT))
             .concat(this.resolvePaths([
                 '../../common.blocks',
-                '../../app.blocks',
                 '../../site.blocks',
-                '../../desktop.blocks'
+                '../../desktop.blocks',
             ]))
 
     });

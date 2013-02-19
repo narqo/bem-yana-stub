@@ -1,6 +1,16 @@
 /*global MAKE:true */
 
-require('./nodes/arch');
+require('./nodes');
+
+var environ = require('./environ');
+
+try {
+    require(environ.getLibPath('bem-yana', '.bem/nodes/bundle'));
+} catch(e) {
+    if(e.code !== 'MODULE_NOT_FOUND')
+        throw e;
+}
+
 
 MAKE.decl('Arch', {
 
@@ -8,7 +18,7 @@ MAKE.decl('Arch', {
 
     bundlesLevelsRegexp: /^.+?\.bundles$/,
 
-    libraries : [ 'bem-bl' ]
+    libraries : [ 'bem-bl', 'bem-yana' ]
 
 });
 
@@ -41,10 +51,6 @@ MAKE.decl('BundleNode', {
             'bemhtml',
             'html'
         ];
-    },
-
-    'create-node.js-optimizer-node' : function(tech, sourceNode, bundleNode) {
-        return this['create-js-optimizer-node'].apply(this, arguments);
     },
 
     'create-bemtree.xjst-optimizer-node' : function(tech, sourceNode, bundleNode) {
