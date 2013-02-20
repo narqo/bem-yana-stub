@@ -26,6 +26,7 @@ exports.getTechs = function() {
         'bemjson.js'    : join(PRJ_TECHS, 'bemjson.js'),
         'bemtree.xjst'  : join(PRJ_TECHS, 'bemtree.xjst.js'),
         'i18n.bemtree.xjst' : join(PRJ_TECHS, 'i18n.bemtree.xjst.js'),
+        'priv.js'       : join(PRJ_TECHS, 'priv.js'),
 
         'i18n'          : join(BEMBL_TECHS, 'i18n.js'),
         'bemhtml'       : join(BEMBL_TECHS, 'bemhtml.js'),
