@@ -30,9 +30,9 @@ MAKE.decl('BundleNode', {
             return [
                 'bemdecl.js',
                 'deps.js',
-                'i18n',
                 'bemhtml',
                 'bemtree.xjst',
+                'priv.js',
                 'node.js'
             ];
         }
