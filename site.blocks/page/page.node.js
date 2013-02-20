@@ -6,9 +6,12 @@ App.View.decl('page', {
         this._template = this._getTemplate();
     },
 
+    _getTemplateName : function(name) {
+        return ['_', name, '.priv.js'].join('');
+    },
+
     _getTemplate : function() {
-        var name = this.__self.getName(),
-            template = name + '.bemtree.xjst';
+        var template = this._getTemplateName(this.__self.getName());
 
         App.Logger.log('Trying template "%s"', template);
 
