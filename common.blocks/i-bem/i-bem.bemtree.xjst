@@ -115,7 +115,7 @@ BEMContext.prototype.applyAsync = function(fn) {
 }
 
 // Wrap xjst's apply and export our own
-exports.apply = BEMContext.apply = function _apply() {
+exports.applyTree = BEMContext.apply = function _apply() {
     var ctx = new BEMContext(this, apply);
     return ctx.apply();
 };
