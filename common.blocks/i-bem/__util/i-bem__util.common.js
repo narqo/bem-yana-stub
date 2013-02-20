@@ -1,5 +1,10 @@
 BEM.UTIL = {
 
+    nextTick : function(fn, ctx) {
+        // TODO: common `nextTick` implementation
+        setTimeout(fn.bind(ctx || this), 0);
+    },
+
     merge : function() {
         var res = {};
 
