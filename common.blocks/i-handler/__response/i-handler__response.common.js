@@ -48,13 +48,14 @@ var ResponseHandler = inherit({
     }
 });
 
+
 var responses = HANDLER._responses = {};
 
-HANDLER.declResponse = function(name, props, staticProps) {
+HANDLER.declResponse = function(decl, props, staticProps) {
     typeof decl === 'string' && (decl = { block : decl });
 
     if(decl.base && !responses[decl.base])
-        throw Error('Base handler "' + decl.base + '" is not defined!');
+        throw Error('Base response handler "' + decl.base + '" is not defined!');
 
     var base = responses[decl.base || decl.block] || ResponseHandler;
 

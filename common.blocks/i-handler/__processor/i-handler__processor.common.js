@@ -97,17 +97,17 @@ HANDLER.Processor = inherit(events.EventEmitter, {
                     {});
     },
 
-    _getHandlerCls : function(handler) {
-        return HANDLER._responses;
+    _getResponseHandlerCls : function(handler) {
+        return HANDLER._responses[handler];
     },
 
     _getHandlerFutureBulkHandlers : function(handler) {
         var res = [],
-            deps = this._getHandlerCls(handler).getFutureHandlers(),
+            deps = this._getResponseHandlerCls(handler).getFutureHandlers(),
             depHandler, depHandlerCls;
 
         while(deps.length) {
-            depHandlerCls = this._getHandlerCls(depHandler = deps.shift());
+            depHandlerCls = this._getResponseHandlerCls(depHandler = deps.shift());
             depHandlerCls.isBulk() && res.push(depHandler);
             deps = deps.concat(depHandlerCls.getFutureHandlers());
         }
@@ -118,7 +118,7 @@ HANDLER.Processor = inherit(events.EventEmitter, {
     _runHandler : function(handler, params) {
         this.emit('run', { handler : handler, params : params });
 
-        return Vow.promise(new (this._getHandlerCls(handler))(handler, params, this).run()).then(
+        return Vow.promise(new (this._getResponseHandlerCls(handler))(handler, params, this).run()).then(
             function(res) {
                 this.emit('success', { handler : handler, result : res });
                 return res;
@@ -133,7 +133,7 @@ HANDLER.Processor = inherit(events.EventEmitter, {
         var bulkHandlerDesc = this._bulkHandlersMap[handler];
         this._runHandler(
                 handler,
-                this._getHandlerCls(handler).mergeParams(params))
+                this._getResponseHandlerCls(handler).mergeParams(params))
             .then(
                 function(val) {
                     bulkHandlerDesc.promise.fulfill(val);

@@ -1,6 +1,7 @@
-(function(HANDLER) {
+(function(HANDLER, UTIL) {
 
-var queuedHandlers = [];
+// XXX: ugly
+var queuedHandlers = HANDLER._queuedHandlers = [];
 
 function findQueuedHandler(key) {
     var handler, i = 0;
@@ -12,7 +13,8 @@ function findQueuedHandler(key) {
 }
 
 var RequestHandler = inherit({
-    __constructor : function(params) {
+    __constructor : function(name, params) {
+        this._name = name;
         this._params = params;
     },
 
@@ -41,13 +43,13 @@ var RequestHandler = inherit({
                 block : this,
                 key   : key
             }) === 1 &&
-                this.__self.nextTick(this.__self._doRequest, this.__self);
+                UTIL.nextTick(this.__self._doRequest, this.__self);
 
         return this._promise = promise;
     },
 
     getName : function() {
-        return this.__self.getName();
+        return this._name;
     },
 
     /**
@@ -77,7 +79,8 @@ var RequestHandler = inherit({
      * @protected
      */
     _doRequest : function() {
-//        throw 'not implemented';
+        // TODO:
+        //throw 'not implemented';
 
         return new HANDLER.Processor(
                 queuedHandlers.map(function(handler) {
@@ -101,17 +104,10 @@ var RequestHandler = inherit({
         handlers.forEach(function(handler) {
             handler.block._promise.reject(Error(err.statusText));
         });
-    },
-
-    getName : function() {
-        return this._name;
-    },
-
-    // TODO
-    nextTick : function(fn, ctx) {
-        setTimeout(fn.bind(ctx || this), 0);
     }
+
 });
+
 
 var requests = HANDLER._requests = {};
 
@@ -119,7 +115,7 @@ HANDLER.declRequest = function(decl, props, staticProps) {
     typeof decl === 'string' && (decl = { block : decl });
 
     if(decl.base && !requests[decl.base])
-        throw Error('Base handler "' + decl.base + '" is not defined!');
+        throw Error('Base request handler "' + decl.base + '" is not defined!');
 
     var base = requests[decl.base || decl.block] || RequestHandler;
 
@@ -127,7 +123,7 @@ HANDLER.declRequest = function(decl, props, staticProps) {
 };
 
 HANDLER.run = function(name, param) {
-    return new (requests[name] || RequestHandler)(param).run();
+    return new (requests[name] || RequestHandler)(name, param).run();
 };
 
-}(BEM.HANDLER));
+}(BEM.HANDLER, BEM.UTIL));
