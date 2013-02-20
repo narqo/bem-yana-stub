@@ -55,7 +55,7 @@ HANDLER.declResponse = function(decl, props, staticProps) {
     typeof decl === 'string' && (decl = { block : decl });
 
     if(decl.base && !responses[decl.base])
-        throw Error('Base response handler "' + decl.base + '" is not defined!');
+        throw new Error('Base response handler "' + decl.base + '" is not defined!');
 
     var base = responses[decl.base || decl.block] || ResponseHandler;
 

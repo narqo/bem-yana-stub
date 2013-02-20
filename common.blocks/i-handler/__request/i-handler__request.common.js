@@ -115,7 +115,7 @@ HANDLER.declRequest = function(decl, props, staticProps) {
     typeof decl === 'string' && (decl = { block : decl });
 
     if(decl.base && !requests[decl.base])
-        throw Error('Base request handler "' + decl.base + '" is not defined!');
+        throw new Error('Base request handler "' + decl.base + '" is not defined!');
 
     var base = requests[decl.base || decl.block] || RequestHandler;
 
