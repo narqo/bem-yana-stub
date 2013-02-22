@@ -70,7 +70,7 @@ function doRequestP() {
 
     log('>>> do request');
 
-    var req = require('https').request('https://smsimple.ru/metro/get_results.php', function(res) {
+    var req = require('https').request('https://api.twitter.com/1/trends/1.json', function(res) {
         res.on('data', function(data) {
             body += data;
         });
@@ -79,8 +79,7 @@ function doRequestP() {
             log('request end');
 
             setTimeout(function() {
-                log('forced timeout end :)');
-                defer.fulfill(body);
+                defer.fulfill(JSON.parse(body));
             }, 500);
         });
 
