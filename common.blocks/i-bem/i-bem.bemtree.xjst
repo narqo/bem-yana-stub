@@ -14,7 +14,7 @@ var BEM_ = {},
 function BEMContext(context, apply_) {
     this.ctx = context;
     this.apply = apply_;
-    this._buf = [];
+    this._buf = {};
     this._ = this;
 
     // Stub out fields that will be used later
@@ -62,47 +62,74 @@ BEMContext.prototype.identify = (function() {
 BEMContext.prototype.xmlEscape = buildEscape('[&<>]');
 BEMContext.prototype.attrEscape = buildEscape('["&<>]');
 
-/*
-BEMContext.prototype.applyAsync = function(callback) {
-    var resultParams,
-        thread = {
-            count : 0,
-            callback : function () {
-                callback(resultParams);
-            }
-        };
-
-    this._globalThread = thread;
-    this.ctx._threads = 0;
-
-    resultParams = this.apply();
-
-    if(thread.count === 0) {
-        thread.callback();
-    }
-};
-*/
-
 BEMContext.prototype.BEM = BEM_;
 
 BEMContext.prototype.generateId = function generateId() {
     return this.identify(this.ctx);
 };
 
+BEMContext.prototype.pause = function() {
+    this.ctx._pause = 1;
+
+    var ctx = {
+            _mode : this._mode,
+            ctx   : this.ctx,
+            block : this.block,
+            elem  : this.elem,
+            mods  : this.mods,
+            elemMods : this.elemMods
+        };
+
+    this._globalThread &&
+        ++this._globalThread.count;
+
+    return ctx;
+};
+
+BEMContext.prototype.resume = function(ctx, fn) {
+    // should we `throw`?
+    if(!this._globalThread)
+        throw new Error('Can\'t in resume synchronous call');
+
+    var args = [].slice.call(arguments, 2);
+
+    local(
+        this._mode = ctx._mode,
+        this.ctx   = ctx.ctx,
+        this.block = ctx.block,
+        this.elem  = ctx.elem,
+        this.mods  = ctx.mods,
+        this.elemMods = ctx.elemMods
+    ) {
+        fn.apply(this, args);
+
+        this.ctx._pause = undefined;
+
+        --this._globalThread.count === 0 &&
+            this._globalThread.callback();
+    }
+}
+
+BEMContext.prototype.applyAsync = function(fn) {
+    return this.resume.bind(this, this.pause(), fn);
+}
+
 // Wrap xjst's apply and export our own
-exports.apply = BEMContext.apply = function _apply() {
+exports.applyTree = BEMContext.apply = function _apply() {
     var ctx = new BEMContext(this, apply);
     return ctx.apply();
 };
 
-exports.applyAsync = BEMContext.applyAsync = function(callback) {
-    if(!callback) return exports.apply.call(this);
+exports.applyAsync = BEMContext.applyAsync = function(fn) {
+    if(!fn) {
+        return BEMContext.apply.call(this);
+    }
 
     var result,
         thread = {
             count : 0,
             callback : function () {
-                callback(result);
+                fn(result);
             }
         };
 
@@ -113,7 +140,8 @@ exports.applyAsync = BEMContext.applyAsync = function(callback) {
 
     result = ctx.apply();
 
-    if(thread.count === 0) thread.callback();
+    thread.count === 0 &&
+        thread.callback();
 };
 
 }();

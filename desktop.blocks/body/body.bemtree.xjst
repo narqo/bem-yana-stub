@@ -1,0 +1,28 @@
+block body {
+
+    default, !this.ctx._pause: {
+
+        var ctx = this.pause();
+
+        BEM.HANDLER
+            .run('photos', {})
+            .then(
+                this.resume.bind(this, ctx, function(data) {
+                    this.ctx.content = applyCtx(data);
+                }),
+                this.resume.bind(this, ctx, function(err) {
+                    this.ctx.content = err;
+                })
+            );
+
+        /*
+        setTimeout(this.applyAsync(function() {
+            dump(this, '<- after setTimeout');
+            this.ctx.content = applyCtx({ elem : 'menu', content : 'he11o11' });
+        }), 700);
+        */
+
+        return applyNext();
+    }
+
+}
