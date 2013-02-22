@@ -10,6 +10,13 @@ App.View.decl({ block : 'index', base : 'page' }, {
         return promise;
     },
 
+    /**
+     * Мы собираем единый бандл `node.js` на все технологии
+     */
+    _getTemplate : function() {
+        return { BEMTREE : BEMTREE, BEMHTML : BEMHTML };
+    },
+
     _getHtml : function(json) {
         return this._template.BEMHTML.call(json);
     },
