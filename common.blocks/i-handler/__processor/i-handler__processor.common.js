@@ -1,12 +1,9 @@
 (function(HANDLER) {
 
-var events = require('events'),
-    concat = Array.prototype.concat;
+var concat = Array.prototype.concat;
 
-HANDLER.Processor = inherit(events.EventEmitter, {
+HANDLER.Processor = inherit(EventEmitter, {
     __constructor : function(handlers, params) {
-        events.EventEmitter.call(this);
-
         this._isRun = false;
         this._inputHandlers = handlers;
         this._params = params;
