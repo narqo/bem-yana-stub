@@ -6,20 +6,33 @@ App.View.decl('page', {
         this._template = this._getTemplate();
     },
 
-    _getTemplateName : function(name) {
-        return ['_', name, '.priv.js'].join('');
+    _getTemplatePath : function(name) {
+        var path = App.Config.param('application').bundlesRoot;
+        return require('path').join(path, name, ['_', name, '.node.js'].join(''));
     },
 
     _getTemplate : function() {
-        var template = this._getTemplateName(this.__self.getName());
+        var templates = this.__self._templates,
+            name = this.__self.getName();
 
-        App.Logger.log('Trying template "%s"', template);
+        App.Logger.debug('Trying template for "%s" from cache', name);
 
-        return require('./' + template);
+        if(templates[name])
+            return templates[name];
+
+        var template = this._getTemplatePath(name);
+
+        App.Logger.debug('Trying template "%s"', template);
+
+        return templates[name] = require(template);
     },
 
     render : function(ctx) {
-        App.Logger.log('å page handler is runnig with ctx');
+        App.Logger.debug('å page handler is runnig with ctx');
     }
+
+}, {
+
+    _templates : {}
 
 });

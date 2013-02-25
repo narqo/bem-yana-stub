@@ -1,7 +1,20 @@
 exports.main = main;
 
 function main() {
+    var path = require('path'),
+        join = path.join,
+
+        PRJ_ROOT = path.resolve(__dirname, '../../'),
+        BUNDLES_ROOT = join(PRJ_ROOT, 'desktop.bundles'),
+        // TODO
+        STATIC_ROOT = join(PRJ_ROOT);
+
     App.Config.params({
+
+        application : {
+            root : PRJ_ROOT,
+            bundlesRoot : BUNDLES_ROOT
+        },
 
         routes : [
             { rule : '/', action : 'index' },
@@ -12,5 +25,5 @@ function main() {
     });
 
     (new App.Http())
-        .start(App.Config.param('node').port);
+        .run(App.Config.param('node').port);
 };
