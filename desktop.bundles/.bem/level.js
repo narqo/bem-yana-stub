@@ -14,11 +14,11 @@ exports.getConfig = function() {
                 'bem-yana/common.blocks',
             ]
             .map(PATH.resolve.bind(null, environ.LIB_ROOT))
-            .concat(this.resolvePaths([
-                '../../common.blocks',
-                '../../site.blocks',
-                '../../desktop.blocks',
-            ]))
+            .concat([
+                'common.blocks',
+                'site.blocks',
+                'desktop.blocks'
+            ].map(PATH.resolve.bind(null, environ.PRJ_ROOT)))
 
     });
 

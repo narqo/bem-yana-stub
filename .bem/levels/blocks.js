@@ -32,7 +32,9 @@ exports.getTechs = function() {
         'i18n'          : join(BEMBL_TECHS, 'i18n.js'),
         'bemhtml'       : join(BEMBL_TECHS, 'bemhtml.js'),
         'html'          : join(BEMBL_TECHS, 'html.js'),
-        'i18n.html'     : join(BEMBL_TECHS, 'i18n.html.js')
+        'i18n.html'     : join(BEMBL_TECHS, 'i18n.html.js'),
+
+        'app.node.js'   : join(BEMYANA_TECHS, 'node.js')
     };
 
 };
