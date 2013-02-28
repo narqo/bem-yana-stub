@@ -5,7 +5,7 @@ function main() {
         join = path.join,
 
         PRJ_ROOT = path.resolve(__dirname, '../../'),
-        BUNDLES_ROOT = join(PRJ_ROOT, 'desktop.bundles'),
+        BUNDLES_ROOT = join(PRJ_ROOT, 'examples.bundles'),
         // TODO
         STATIC_ROOT = join(PRJ_ROOT);
 
@@ -17,7 +17,7 @@ function main() {
         },
 
         routes : [
-            { rule : '/', action : 'page' },
+            { rule : '/', action : 'page' }
         ]
 
     });
