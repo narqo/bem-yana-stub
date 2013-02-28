@@ -19,7 +19,7 @@ HANDLER.Processor = inherit(HANDLER.CommonProcessor, {
         return Vow.allResolved(
                 this._inputHandlers.map(
                     function(block) {
-                        return this.runHandler(block.getName(), block.params);
+                        return this.runHandler(block.getName(), block._params);
                     },
                     this))
             .then(function(res) {
