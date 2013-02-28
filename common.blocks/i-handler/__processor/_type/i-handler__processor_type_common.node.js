@@ -1,11 +1,11 @@
-var EventEmitter = (function() {
+(function(HANDLER) {
 
 var events = require('events');
 
-return inherit(events.EventEmitter, {
+HANDLER.CommonProcessor = inherit(events.EventEmitter, {
     __constructor : function() {
         events.EventEmitter.call(this);
     }
 });
 
-}());
+}(BEM.HANDLER));

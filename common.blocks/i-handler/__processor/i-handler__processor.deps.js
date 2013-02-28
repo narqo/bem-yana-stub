@@ -1,5 +1,5 @@
 ({
     mustDeps : [
-        { block : 'i-event-emitter' }
+        { mod : 'type', val : 'common' }
     ]
 })

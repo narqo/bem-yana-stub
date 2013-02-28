@@ -2,7 +2,7 @@
 
 var concat = Array.prototype.concat;
 
-HANDLER.Processor = inherit(EventEmitter, {
+HANDLER.Processor = inherit(HANDLER.CommonProcessor, {
     __constructor : function(handlers, params) {
         this._isRun = false;
         this._inputHandlers = handlers;
