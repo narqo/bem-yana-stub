@@ -1,0 +1,25 @@
+this._start, !this.data {
+
+    default: {
+        return applyCtx(
+                this.data = this.ctx,
+                this.ctx = [
+                    { block : 'global' },
+                    {
+                        block : 'b-page',
+                        content: [
+                            { block : 'github' }
+                        ]
+                    }
+                ]
+            );
+    }
+
+}
+
+
+block global {
+
+    default: false
+
+}

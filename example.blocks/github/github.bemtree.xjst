@@ -1,0 +1,36 @@
+block github {
+
+    content: {
+        var ctx = this.pause(),
+            org = 'bem';
+
+        BEM.HANDLER.run('github', { org : org })
+            .then(this.resume.bind(this, ctx, function(data) {
+                this.ctx.org = org;
+                this.ctx.content = applyCtx(this._mode = '', this.ctx = { elem : 'data', content : data });
+            }));
+    }
+
+    elem data, default {
+
+        this.ctx.content: {
+            return applyCtx({
+                block : 'user',
+                data : this.ctx.content
+            });
+        }
+
+        this._.isArray(this.ctx.content): {
+            var ctx = this.ctx,
+                i = 0,
+                l = ctx.content.length,
+                r = [];
+
+            while(i < l)
+                r.push(apply(this.ctx.content = ctx.content[i++]));
+
+            return r;
+        }
+
+    }
+}

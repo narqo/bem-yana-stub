@@ -1,0 +1,19 @@
+block user {
+
+    this.ctx.data, default: {
+        var data = this.ctx.data;
+
+        return applyCtx({
+            block : 'user',
+            url : data.html_url,
+            login : data.login,
+            content : [
+                {
+                    elem : 'pic',
+                    url : data.avatar_url
+                }
+            ]
+        });
+    }
+
+}
