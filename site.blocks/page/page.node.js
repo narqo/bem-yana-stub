@@ -7,7 +7,7 @@ App.View.decl('page', {
     },
 
     _getTemplatePath : function(name) {
-        var path = App.Config.param('application').bundlesRoot;
+        var path = App.Config.param('BUNDLES_ROOT');
         return require('path').join(path, name, ['_', name, '.node.js'].join(''));
     },
 

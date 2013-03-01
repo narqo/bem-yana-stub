@@ -6,6 +6,7 @@
     ],
     shouldDeps : [
         { block : 'page' },
-        { block : 'page', mods : { action : 'index' } }
+        { block : 'page', mods : { action : 'index' } },
+        { block : 'view', elem : 'static' }
     ]
 })

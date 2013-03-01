@@ -11,19 +11,18 @@ function main() {
 
     App.Config.params({
 
-        application : {
-            root : PRJ_ROOT,
-            bundlesRoot : BUNDLES_ROOT
-        },
+        PRJ_ROOT : PRJ_ROOT,
+
+        BUNDLES_ROOT : BUNDLES_ROOT,
 
         routes : [
-            { rule : '/', action : 'index' },
+            { rule : '/$', action : 'index' },
             { rule : '/albums', action : 'albums' },
             { rule : '/albums/{id}', action : 'album' },
+            { rule : '/.+\.(?:ico|css|js)$', action : 'static' }
         ]
 
     });
 
-    (new App.Http())
-        .run(App.Config.param('node').port);
+    (new App.Http()).run();
 };
