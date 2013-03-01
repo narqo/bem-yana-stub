@@ -10,19 +10,20 @@ App.View.decl('page', {
         return {
             req : this._req,
             res : this._res,
-            bundleName : this._getName(),
-            pageName : 'My page!'
+            bundleName : 'index', //this._getName(),
+            pageName : 'My page!',
+            staticHost : App.Config('STATIC_URL')
         };
     },
 
     _getTemplate : function() {
-        return { BEMTREE : BEMTREE, BEMHTML : BEMHTML };
+        return { bemtree : BEMTREE, bemhtml : BEMHTML };
     },
 
     _getBemjson : function(ctx) {
         var promise = Vow.promise();
 
-        this._template.BEMTREE.call(ctx, { callback : function(bemjson) {
+        this._template.bemtree.call(ctx, { callback : function(bemjson) {
             return promise.fulfill(bemjson);
         }});
 
@@ -30,7 +31,7 @@ App.View.decl('page', {
     },
 
     _getHtml : function(bemjson) {
-        return this._template.BEMHTML.apply(bemjson);
+        return this._template.bemhtml.apply(bemjson);
     },
 
     render : function(ctx) {

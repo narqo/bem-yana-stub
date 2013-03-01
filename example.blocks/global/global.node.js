@@ -4,24 +4,24 @@ function main() {
     var path = require('path'),
         join = path.join,
 
-        PRJ_ROOT = path.resolve(__dirname, '../../'),
-        BUNDLES_ROOT = join(PRJ_ROOT, 'examples.bundles'),
-        // TODO
-        STATIC_ROOT = join(PRJ_ROOT);
+        PRJ_ROOT = path.resolve(__dirname, '../../');
 
     App.Config.params({
 
-        application : {
-            root : PRJ_ROOT,
-            bundlesRoot : BUNDLES_ROOT
-        },
+        PRJ_ROOT : PRJ_ROOT,
+
+        BUNDLES_ROOT : join(PRJ_ROOT, 'examples.bundles'),
+
+        STATIC_ROOT  : __dirname,   // `STATIC_ROOT` is pointing to bundle's dir
 
         routes : [
-            { rule : '/', action : 'page' }
+            { rule : '/$', action : 'page' },
+            { rule : '/.+\.(?:css|js|ico)$', action : 'static' }
         ]
 
     });
 
-    (new App.Http())
-        .run(App.Config.param('node').port);
+    var app = new App.Http();
+    // ..?
+    app.run();
 };
