@@ -2,3 +2,10 @@
 {
 
 }
+
+.user__avatar
+{
+    display: block;
+    box-shadow: inset 0 1px 0 1px rgba(0, 0, 0, .2);
+    border-radius: 100%;
+}
