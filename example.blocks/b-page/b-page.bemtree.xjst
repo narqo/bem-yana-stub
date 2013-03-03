@@ -1,19 +1,25 @@
 block b-page {
 
     default: {
-        var bundleName = this.data.bundleName;
+        var bundle = this.data.bundleName,
+            cssUrl = apply('asset-url', this.ctx.name = bundle, this.ctx.ext = 'css'),
+            jsUrl = apply('asset-url', this.ctx.name = bundle, this.ctx.ext = 'js');
 
         return applyCtx({
             block : this.block,
             title : this.data.pageName,
             favicon : '/favicon.ico',
             head : [
-                { elem : 'css', url : '_' + bundleName + '.css' },
+                { elem : 'css', url : cssUrl },
                 { block : 'i-jquery', elem : 'core' },
-                { elem : 'js', url : '_' + bundleName + '.js' }
+                { elem : 'js', url : jsUrl }
             ],
             content : this.ctx.content
         });
+    }
+
+    asset-url: {
+        return [this.data.staticHost, '_', this.ctx.name, '.', this.ctx.ext].join('');
     }
 
 }
