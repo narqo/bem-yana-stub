@@ -19,7 +19,7 @@ block b-page {
     }
 
     asset-url: {
-        return [this.data.staticHost, '_', this.ctx.name, '.', this.ctx.ext].join('');
+        return [this.data.staticUrl, '_', this.ctx.name, '.', this.ctx.ext].join('');
     }
 
 }
