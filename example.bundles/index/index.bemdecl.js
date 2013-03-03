@@ -4,6 +4,7 @@ exports.blocks = [
         mods : {
             init : 'auto',
             debug : 'yes'
+//            debug : 'bem-server'
         }
     },
     { block : 'b-page'},
