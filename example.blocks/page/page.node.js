@@ -44,7 +44,7 @@ App.View.decl('page', {
         return this._getBemjson(ctx)
             .then(function(json) {
 //                console.dir(require('util').inspect(json, false, 99));
-//                return JSON.stringify(json, null, 2);
+//                return '<pre>' + JSON.stringify(json, null, 2) + '</pre>';
 
                 return _t._getHtml(json);
             });
