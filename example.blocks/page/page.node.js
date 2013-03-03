@@ -4,6 +4,7 @@ App.View.decl('page', {
         this.__base.apply(this, arguments);
 
         this._template = this._getTemplate();
+        this._mode = this._getRequestMode();
     },
 
     _createContext : function() {
@@ -14,6 +15,10 @@ App.View.decl('page', {
             pageName : 'My page!',
             staticUrl : App.Config.param('STATIC_URL')
         };
+    },
+
+    _getRequestMode : function() {
+        return App.Config.param('DEBUG')? this._req.query.__mode : 'html';
     },
 
     _getTemplate : function() {
@@ -44,7 +49,8 @@ App.View.decl('page', {
         return this._getBemjson(ctx)
             .then(function(json) {
 //                console.dir(require('util').inspect(json, false, 99));
-//                return '<pre>' + JSON.stringify(json, null, 2) + '</pre>';
+                if(_t._mode === 'json')
+                    return '<pre>' + JSON.stringify(json, null, 2) + '</pre>';
 
                 return _t._getHtml(json);
             });
