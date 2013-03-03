@@ -12,7 +12,7 @@ App.View.decl('page', {
             res : this._res,
             bundleName : 'index', //this._getName(),
             pageName : 'My page!',
-            staticHost : App.Config('STATIC_URL')
+            staticHost : App.Config.param('STATIC_URL')
         };
     },
 
