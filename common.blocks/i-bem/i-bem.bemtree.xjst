@@ -68,9 +68,7 @@ BEMContext.prototype.generateId = function generateId() {
     return this.identify(this.ctx);
 };
 
-BEMContext.prototype.pause = function() {
-    this.ctx._pause = 1;
-
+BEMContext.prototype.doAsync = function(fn) {
     var ctx = {
             _mode : this._mode,
             ctx   : this.ctx,
@@ -78,70 +76,42 @@ BEMContext.prototype.pause = function() {
             elem  : this.elem,
             mods  : this.mods,
             elemMods : this.elemMods
-        };
+        },
+        promise = Vow.resolve(fn.call(this));
 
-    this._globalThread &&
-        ++this._globalThread.count;
+    (this.__queue || (this.__queue = [])).push(promise);
 
-    return ctx;
+    promise.always(function() {
+        this._mode = ctx._mode;
+        this.ctx   = ctx.ctx;
+        this.block = ctx.block;
+        this.elem  = ctx.elem;
+        this.mods  = ctx.mods;
+        this.elemMods = ctx.elemMods;
+    }.bind(this));
+
+    return promise;
 };
 
-BEMContext.prototype.resume = function(ctx, fn) {
-    // should we `throw`?
-    if(!this._globalThread)
-        throw new Error('Can\'t in resume synchronous call');
-
-    var args = [].slice.call(arguments, 2);
-
-    local(
-        this._mode = ctx._mode,
-        this.ctx   = ctx.ctx,
-        this.block = ctx.block,
-        this.elem  = ctx.elem,
-        this.mods  = ctx.mods,
-        this.elemMods = ctx.elemMods
-    ) {
-        fn.apply(this, args);
-
-        this.ctx._pause = undefined;
-
-        --this._globalThread.count === 0 &&
-            this._globalThread.callback();
-    }
-}
-
-BEMContext.prototype.applyAsync = function(fn) {
-    return this.resume.bind(this, this.pause(), fn);
-}
-
 // Wrap xjst's apply and export our own
-exports.apply = BEMContext.apply = function _apply() {
+exports.applyTree = BEMContext.apply = function _apply() {
     var ctx = new BEMContext(this, apply);
     return ctx.apply();
 };
 
-exports.applyAsync = BEMContext.applyAsync = function(fn) {
-    if(!fn) {
-        return BEMContext.apply.call(this);
-    }
+exports.applyAsync = BEMContext.applyAsync = function() {
+    var queue = [],
+        ctx = new BEMContext(this, apply),
+        result;
 
-    var result,
-        thread = {
-            count : 0,
-            callback : function () {
-                fn(result);
-            }
-        };
-
-    this._threads = 0;
-
-    var ctx = new BEMContext(this, apply);
-    ctx._globalThread = thread;
+    ctx.__queue = queue;
 
     result = ctx.apply();
 
-    thread.count === 0 &&
-        thread.callback();
+    return Vow.all(ctx.__queue)
+        .always(function() {
+            return result;
+        });
 };
 
 }();
