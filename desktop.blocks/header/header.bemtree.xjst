@@ -21,7 +21,7 @@ block header {
                         function(data) {
                             dump(this, '<- after P request');
 
-                            return this.apply(this._mode = '', this.ctx = data);
+                            return apply(this._mode = '', this.ctx = { elem : 'bembembem', data : data });
                         }.bind(this),
                         function(err) {
                             dump(this, '<- after P request fail!');
@@ -47,6 +47,11 @@ block header {
             return applyNext(this.ctx.data = this._smsResults);
         }
 
+    }
+
+    elem bembembem, this.ctx.data, content: {
+        elem : 'login',
+        content : this.ctx.data.login
     }
 
 }
