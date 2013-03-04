@@ -1,13 +1,16 @@
 block body {
 
-    default, !this.ctx._pause: {
+    default: {
 
-        setTimeout(this.applyAsync(function() {
-            dump(this, '<- after setTimeout');
-            this.ctx.content = applyCtx({ elem : 'menu', content : 'he11o11' });
-        }), 700);
+        return this.doAsync(function() {
+                return 'some async result';
+            })
+            .then(function(data) {
+                dump(this, '<- after some async function');
 
-        return apply();
+                return data;
+            }.bind(this));
+
     }
 
 }
