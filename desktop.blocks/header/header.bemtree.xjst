@@ -16,39 +16,19 @@ block header {
         content, !this.ctx._pause: {
             dump(this, '<- before P request');
 
-            /**
-             * XXX: короткий вариант
-             * не работает для случая, если нужен errback-вызов
-             */
-//            doRequestP()
-//                .then(this.applyAsync(function(data) {
-//                    dump(this, '<- after P request');
-//
-//                    this.ctx.content = applyCtx({ elem : 'title-wrap', content : 'Hello!' });
-//                ))
-//                .done();
+            return this.doAsync(doRequestP)
+                .then(
+                        function(data) {
+                            dump(this, '<- after P request');
 
-            var ctx = this.pause();
+                            return apply(this._mode = '', this.ctx = { elem : 'bembembem', data : data });
+                        }.bind(this),
+                        function(err) {
+                            dump(this, '<- after P request fail!');
 
-            doRequestP()
-                .then(this.resume.bind(this, ctx, function(data) {
-                    dump(this, '<- after P request');
-
-                    this.ctx.content = apply(
-                            this._smsResults = data,
-                            this._mode = '',
-                            this.ctx = {
-                                elem : 'title-wrap',
-                                content : 'Hello!'
-                            });
-                }))
-                .fail(this.resume.bind(this, ctx, function(err) {
-                    dump(this, '<- after P request fail!');
-
-                    apply();
-                }))
-                .done();
-
+                            return applyNext(this.ctx.content = 'blah-blah');
+                        }.bind(this)
+                    );
         }
 
     }
@@ -69,6 +49,11 @@ block header {
 
     }
 
+    elem bembembem, this.ctx.data, content: {
+        elem : 'login',
+        content : this.ctx.data.login
+    }
+
 }
 
 
@@ -78,7 +63,7 @@ function doRequestP() {
 
     log('>>> do request');
 
-    var req = require('https').request('https://smsimple.ru/metro/get_results.php', function(res) {
+    var req = require('https').request('https://api.github.com/users/bem', function(res) {
         res.on('data', function(data) {
             body += data;
         });
@@ -87,9 +72,9 @@ function doRequestP() {
             log('request end');
 
             setTimeout(function() {
-                // XXX: ручка отдает невалидный JSON — фиксим ;)
-                defer.fulfill(JSON.parse(body.slice(1, -1)));
-            }, 500);
+//                defer.reject(new Error('Blah!'));
+                defer.fulfill(JSON.parse(body));
+            }, 300);
         });
 
         res.on('error', function(err) {

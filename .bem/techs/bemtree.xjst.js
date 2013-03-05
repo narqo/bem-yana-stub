@@ -51,12 +51,12 @@ exports.techMixin = {
                 'xjst.applyAsync.call($1,options.callback);');
 
         return [
-            'var main = function(data) {',
+//            'var main = function(data) {',
             bemtreeAsync.replace(/BEMHTML/g, bemtreeName),  // FIXME: ugly hack!
-            bemhtml,
-            U.format('return { %s : %s, %s: %s }', bemhtmlName, bemhtmlName, bemtreeName, bemtreeName),
-            '};',
-            'typeof module === "undefined" || (module.exports = main());'
+//            bemhtml,
+//            U.format('return { %s : %s, %s: %s }', bemhtmlName, bemhtmlName, bemtreeName, bemtreeName),
+//            '};',
+//            'typeof module === "undefined" || (module.exports = main());'
             ];
     },
 
