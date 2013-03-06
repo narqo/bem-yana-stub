@@ -56,11 +56,20 @@ var RequestHandler = inherit({
      * @returns {String}
      */
     getKey : function() {
+        var seen = [];
         return [
             this.getName(),
-            JSON.stringify(this._params)
+            JSON.stringify(this._params, function(key, val) {
+                if(typeof val === 'object') {
+                    if(~seen.indexOf(val))
+                        return undefined;
+                    seen.push(val);
+                }
+                return val;
+            })
         ].join('\x0B');
     },
+
 
     /**
      * @returns {Boolean}
