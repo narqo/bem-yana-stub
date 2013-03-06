@@ -62,7 +62,7 @@ var RequestHandler = inherit({
             JSON.stringify(this._params, function(key, val) {
                 if(typeof val === 'object') {
                     if(~seen.indexOf(val))
-                        return undefined;
+                        return '[Circular]';
                     seen.push(val);
                 }
                 return val;
