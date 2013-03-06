@@ -91,13 +91,15 @@ var RequestHandler = inherit({
         // TODO:
         //throw 'not implemented';
 
-        return new HANDLER.Processor(
+        new HANDLER.Processor(
                 queuedHandlers.map(function(handler) {
                     return handler.block;
                 }))
                 .run()
                 .then(this._onRequestDone.bind(this, queuedHandlers),
                         this._onRequestFailed.bind(this, queuedHandlers));
+
+        queuedHandlers = [];
     },
 
     _onRequestDone : function(handlers, res) {
