@@ -1,8 +1,9 @@
+(function(global) {
+
 BEM.UTIL = {
 
     nextTick : function(fn, ctx) {
-        // TODO: common `nextTick` implementation
-        setTimeout(fn.bind(ctx || this), 0);
+        nextTick(fn.bind(ctx || this));
     },
 
     merge : function() {
@@ -44,3 +45,52 @@ BEM.UTIL = {
     }
 
 };
+
+/**
+ * Cross-platform `nextTick` implementation from
+ * https://github.com/dfilatov/jspromise/
+ * @type Function
+ */
+var nextTick = typeof process === 'object'? // nodejs
+    process.nextTick :
+    global.setImmediate? // ie10
+        global.setImmediate :
+        global.postMessage? // modern browsers
+            (function() {
+                var msg = '__bem' + +new Date,
+                    onMessage = function(e) {
+                        if(e.data === msg) {
+                            e.stopPropagation && e.stopPropagation();
+                            callFns();
+                        }
+                    };
+
+                global.addEventListener?
+                    global.addEventListener('message', onMessage, true) :
+                    global.attachEvent('onmessage', onMessage);
+
+                return function(fn) {
+                    fns.push(fn) === 1 && global.postMessage(msg, '*');
+                };
+            })() :
+            'onreadystatechange' in global.document.createElement('script')? // old IE
+                (function() {
+                    var createScript = function() {
+                            var script = document.createElement('script');
+                            script.onreadystatechange = function() {
+                                script.parentNode.removeChild(script);
+                                script = script.onreadystatechange = null;
+                                callFns();
+                            };
+                            (global.document.documentElement || global.document.body).appendChild(script);
+                        };
+
+                    return function(fn) {
+                        fns.push(fn) === 1 && createScript();
+                    };
+                })() :
+                function(fn) { // old browsers
+                    setTimeout(fn, 0);
+                };
+
+}(this));
