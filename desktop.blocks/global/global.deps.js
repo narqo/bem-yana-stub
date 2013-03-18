@@ -2,7 +2,7 @@
     mustDeps : [
         { block : 'i-bem' },
         { block : 'i-promise' },
-        { block : 'i-common' }
+        { block : 'common' }
     ],
     shouldDeps : [
         { block : 'page' },

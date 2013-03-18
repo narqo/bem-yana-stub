@@ -21,12 +21,5 @@ this._start, !this.data {
 
 block global {
 
-    content: [
-        {
-            params : {
-                'static-host' : this.data['static-host'],
-                'login' : this.data['login']
-            }
-        }
-    ]
+    default: false
 }

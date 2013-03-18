@@ -1,0 +1,7 @@
+function isPromise(obj) {
+    return typeof obj._res !== 'undefined';
+}
+
+this._mode === '', this.ctx, isPromise(this.ctx): {
+    apply(this.ctx = this.ctx._res);
+}
