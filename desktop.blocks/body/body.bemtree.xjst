@@ -2,15 +2,18 @@ block body {
 
     default: {
 
-        return this.doAsync(BEM.HANDLER.run('photos', {}))
+        return this.doAsync(function() {
+                return BEM.HANDLER.run('photos', {});
+            })
             .then(function(data) {
                     dump(this, '<- after some async function');
 
+                    console.log(data);
                     return applyCtx(data);
-                }.bind(this)
+                }.bind(this),
                 function(err) {
-                    return this.ctx.content = err;
-                }
+                    return applyNext(this.ctx.content = err);
+                }.bind(this)
             );
 
     }
