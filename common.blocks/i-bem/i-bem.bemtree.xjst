@@ -118,7 +118,7 @@ exports.applyAsync = BEMContext.applyAsync = function() {
 return exports;
 
 
-!this._mode {
+this._mode === '' {
 
     true: {
         this.ctx || (this.ctx = {});
@@ -158,7 +158,6 @@ return exports;
 }
 
 default: {
-    dump(this);
     var content = apply('content');
     if(content || content === 0) {
         this.ctx.content = apply(this._mode = '', this.ctx = content);
@@ -167,6 +166,5 @@ default: {
 }
 
 content: {
-    dump(this);
     return this.ctx.content
 }
