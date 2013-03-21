@@ -1,4 +1,4 @@
-App.View.decl('page', {
+Yana.View.decl('page', {
 
     __constructor : function() {
         this.__base.apply(this, arguments);
@@ -10,13 +10,13 @@ App.View.decl('page', {
         var name = this.__self.getName(),
             template = name + '.bemtree.xjst';
 
-        App.Logger.log('Trying template "%s"', template);
+        Yana.Logger.debug('Trying template "%s"', template);
 
         return require('./' + template);
     },
 
     render : function(ctx) {
-        App.Logger.log('å page handler is runnig with ctx');
+        Yana.Logger.info('å page handler is runnig with ctx');
     }
 
 });

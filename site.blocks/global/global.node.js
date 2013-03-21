@@ -1,7 +1,7 @@
 exports.main = main;
 
 function main() {
-    App.Config.params({
+    Yana.Config.params({
 
         routes : [
             { rule : '/', action : 'index' },
@@ -11,6 +11,5 @@ function main() {
 
     });
 
-    (new App.Http())
-        .start(App.Config.param('node').port);
+    (new Yana.Http).run();
 };
