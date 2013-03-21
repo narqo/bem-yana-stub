@@ -9,7 +9,7 @@ function main() {
         // TODO
         STATIC_ROOT = join(PRJ_ROOT);
 
-    App.Config.params({
+    Yana.Config.params({
 
         PRJ_ROOT : PRJ_ROOT,
 
@@ -24,5 +24,5 @@ function main() {
 
     });
 
-    (new App.Http()).run();
+    (new Yana.Http).run();
 };

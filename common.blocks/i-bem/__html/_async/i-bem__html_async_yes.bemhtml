@@ -1,5 +1,5 @@
 function isPromise(obj) {
-    return typeof obj._res !== 'undefined';
+    return typeof obj._res != null;
 }
 
 this._mode === '', this.ctx, isPromise(this.ctx): {

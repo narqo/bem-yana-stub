@@ -11,8 +11,8 @@
   "dependencies": {
     "inherit": "~1.0.4",
     "vow": "~0.1.10",
-    "cookies": "~0.3.6",
-    "node-static": "*"
+    "node-static": "*",
+    "cookie": "~0.0.5"
   },
   "devDependencies": {
     "bem": "~0.5.23",

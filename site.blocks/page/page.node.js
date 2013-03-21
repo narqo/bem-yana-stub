@@ -1,4 +1,4 @@
-App.View.decl('page', {
+Yana.View.decl('page', {
 
     __constructor : function() {
         this.__base.apply(this, arguments);
@@ -22,7 +22,7 @@ App.View.decl('page', {
 
         var template = this._getTemplatePath(name);
 
-        App.Logger.debug('Trying template "%s"', template);
+        Yana.Logger.debug('Trying template "%s"', template);
 
         return templates[name] = require(template);
     },

@@ -1,11 +1,12 @@
-App.View.decl({ block : 'index', base : 'page' }, {
+Yana.View.decl({ block : 'index', base : 'page' }, {
 
     _getBemjson : function(ctx) {
         var promise = Vow.promise();
 
-        this._template.BEMTREE.call(ctx, { callback : function(bemjson) {
-            return promise.fulfill(bemjson);
-        }});
+        this._template.BEMTREE.call(ctx)
+            .then(function(bemjson) {
+                return promise.fulfill(bemjson);
+            });
 
         return promise;
     },

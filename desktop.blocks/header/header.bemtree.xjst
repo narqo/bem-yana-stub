@@ -21,7 +21,7 @@ block header {
                         function(data) {
                             dump(this, '<- after P request');
 
-                            return apply(this._mode = '', this.ctx = { elem : 'bembembem', data : data });
+                            return applyCtx({ elem : 'bembembem', data : data });
                         }.bind(this),
                         function(err) {
                             dump(this, '<- after P request fail!');
@@ -29,22 +29,6 @@ block header {
                             return applyNext(this.ctx.content = 'blah-blah');
                         }.bind(this)
                     );
-        }
-
-    }
-
-    elem title-wrap, content {
-
-        this.ctx.data: [
-            {
-                block : 'results',
-                content : this.ctx.data
-            },
-            this.ctx.content
-        ]
-
-        this._smsResults: {
-            return applyNext(this.ctx.data = this._smsResults);
         }
 
     }
