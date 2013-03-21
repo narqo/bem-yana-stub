@@ -91,6 +91,14 @@ var nextTick = typeof process === 'object'? // nodejs
                 })() :
                 function(fn) { // old browsers
                     setTimeout(fn, 0);
-                };
+                },
+    fns = [],
+    callFns = function() {
+        var fnsToCall = fns, i = 0, len = fns.length;
+        fns = [];
+        while(i < len) {
+            fnsToCall[i++]();
+        }
+    };
 
 }(this));
