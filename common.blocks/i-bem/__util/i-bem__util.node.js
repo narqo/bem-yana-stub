@@ -1,0 +1,1 @@
+BEM.UTIL.inherit = inherit;
