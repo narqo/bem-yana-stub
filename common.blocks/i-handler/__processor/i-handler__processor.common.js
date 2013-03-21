@@ -1,8 +1,8 @@
-(function(HANDLER) {
+(function(HANDLER, _) {
 
 var concat = Array.prototype.concat;
 
-HANDLER.Processor = inherit(HANDLER.CommonProcessor, {
+HANDLER.Processor = _.inherit(HANDLER.CommonProcessor, {
     __constructor : function(handlers, params) {
         this._isRun = false;
         this._inputHandlers = handlers;
@@ -19,7 +19,7 @@ HANDLER.Processor = inherit(HANDLER.CommonProcessor, {
         return Vow.allResolved(
                 this._inputHandlers.map(
                     function(block) {
-                        return this.runHandler(block.getName(), block._params);
+                        return this.runHandler(block.name, block.params);
                     },
                     this))
             .then(function(res) {
@@ -73,7 +73,7 @@ HANDLER.Processor = inherit(HANDLER.CommonProcessor, {
             this._inputHandlers
                 .map(
                     function(block) {
-                        return this._getHandlerFutureBulkHandlers(block.getName());
+                        return this._getHandlerFutureBulkHandlers(block.name);
                     },
                     this))
                 .reduce(
@@ -100,8 +100,13 @@ HANDLER.Processor = inherit(HANDLER.CommonProcessor, {
 
     _getHandlerFutureBulkHandlers : function(handler) {
         var res = [],
-            deps = this._getResponseHandlerCls(handler).getFutureHandlers(),
+            deps = [],
+            handlerCls = this._getResponseHandlerCls(handler),
             depHandler, depHandlerCls;
+
+        if(handlerCls) {
+            deps = handlerCls.getFutureHandlers();
+        }
 
         while(deps.length) {
             depHandlerCls = this._getResponseHandlerCls(depHandler = deps.shift());
@@ -141,4 +146,4 @@ HANDLER.Processor = inherit(HANDLER.CommonProcessor, {
     }
 });
 
-}(BEM.HANDLER));
+}(BEM.HANDLER, BEM.UTIL));

@@ -1,9 +1,9 @@
-(function(HANDLER, UTIL) {
+(function(HANDLER, _) {
 
-var ResponseHandler = inherit({
+var ResponseHandler = _.inherit({
     __constructor : function(name, params, processor) {
         this._name = name;
-        this._params = UTIL.merge(this._getDefaultParams(), params);
+        this._params = _.merge(this._getDefaultParams(), params);
         this._processor = processor;
     },
 
@@ -59,7 +59,7 @@ HANDLER.declResponse = function(decl, props, staticProps) {
 
     var base = responses[decl.base || decl.block] || ResponseHandler;
 
-    (responses[decl.block] = inherit(base, props, staticProps))._name = decl.block;
+    (responses[decl.block] = _.inherit(base, props, staticProps))._name = decl.block;
 };
 
 }(BEM.HANDLER, BEM.UTIL));

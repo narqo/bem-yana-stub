@@ -1,5 +1,6 @@
 ({
     mustDeps : [
-        { mod : 'type', val : 'common' }
+        { mod : 'type', val : 'common' },
+        { block : 'i-handler' }
     ]
 })

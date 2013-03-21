@@ -1,18 +1,19 @@
-(function(HANDLER, UTIL) {
+(function(HANDLER, _) {
 
-// XXX: ugly
-var queuedHandlers = HANDLER._queuedHandlers = [];
+var requests = HANDLER._requests = {};
+
+HANDLER._queuedHandlers = [];
 
 function findQueuedHandler(key) {
     var handler, i = 0;
-    while(handler = queuedHandlers[i++]) {
+    while(handler = HANDLER._queuedHandlers[i++]) {
         if(handler.key === key) {
             return handler;
         }
     }
 }
 
-var RequestHandler = inherit({
+var RequestHandler = _.inherit({
     __constructor : function(name, params) {
         this._name = name;
         this._params = params;
@@ -38,18 +39,14 @@ var RequestHandler = inherit({
         }
 
         var promise = Vow.promise();
-        queuedHandlers.push(
+        HANDLER._queuedHandlers.push(
             {
                 block : this,
                 key   : key
             }) === 1 &&
-                UTIL.nextTick(this.__self._doRequest, this.__self);
+                _.nextTick(this.__self._doRequest, this.__self);
 
         return this._promise = promise;
-    },
-
-    getName : function() {
-        return this._name;
     },
 
     /**
@@ -58,7 +55,7 @@ var RequestHandler = inherit({
     getKey : function() {
         var seen = [];
         return [
-            this.getName(),
+            this._name,
             JSON.stringify(this._params, function(key, val) {
                 if(typeof val === 'object') {
                     if(~seen.indexOf(val))
@@ -91,15 +88,18 @@ var RequestHandler = inherit({
         // TODO:
         //throw 'not implemented';
 
+        var queuedHandlers = HANDLER._queuedHandlers;
+
         new HANDLER.Processor(
                 queuedHandlers.map(function(handler) {
-                    return handler.block;
+                    var block = handler.block;
+                    return { name : block._name, params : block._params };
                 }))
                 .run()
                 .then(this._onRequestDone.bind(this, queuedHandlers),
                         this._onRequestFailed.bind(this, queuedHandlers));
 
-        queuedHandlers = [];
+        queuedHandlers = HANDLER._queuedHandlers = [];
     },
 
     _onRequestDone : function(handlers, res) {
@@ -120,8 +120,6 @@ var RequestHandler = inherit({
 });
 
 
-var requests = HANDLER._requests = {};
-
 HANDLER.declRequest = function(decl, props, staticProps) {
     typeof decl === 'string' && (decl = { block : decl });
 
@@ -130,7 +128,7 @@ HANDLER.declRequest = function(decl, props, staticProps) {
 
     var base = requests[decl.base || decl.block] || RequestHandler;
 
-    (requests[decl.block] = inherit(base, props, staticProps))._name = decl.block;
+    (requests[decl.block] = _.inherit(base, props, staticProps))._name = decl.block;
 };
 
 HANDLER.run = function(name, param) {
