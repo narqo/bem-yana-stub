@@ -34,7 +34,7 @@ MAKE.decl('BundleNode', {
                 'bemhtml',
 //                'i18n.bemtree.xjst',
                 'bemtree.xjst',
-//                'node.js'
+                'node.js'
             ];
         }
 
