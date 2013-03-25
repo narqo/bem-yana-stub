@@ -77,7 +77,7 @@ BEMContext.prototype.doAsync = function(fn) {
             mods  : this.mods,
             elemMods : this.elemMods
         },
-        promise = Vow.resolve(fn.call(this));
+        promise = Vow.invoke(fn);
 
     (this.__queue || (this.__queue = [])).push(promise);
 
@@ -108,8 +108,8 @@ exports.applyAsync = BEMContext.applyAsync = function() {
 
     result = ctx.apply();
 
-    return Vow.all(ctx.__queue)
-        .always(function() {
+    return Vow.allResolved(ctx.__queue)
+        .then(function() {
             return result;
         });
 };
