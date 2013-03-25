@@ -1,0 +1,25 @@
+block b-page {
+
+    default: {
+        var bundle = this.data.bundleName,
+            cssUrl = apply('asset-url', this.ctx.name = bundle, this.ctx.ext = 'css'),
+            jsUrl = apply('asset-url', this.ctx.name = bundle, this.ctx.ext = 'js');
+
+        return applyCtx({
+            block : this.block,
+            title : this.data.pageName,
+            favicon : '/favicon.ico',
+            head : [
+                { elem : 'css', url : cssUrl },
+                { block : 'i-jquery', elem : 'core' },
+                { elem : 'js', url : jsUrl }
+            ],
+            content : this.ctx.content
+        });
+    }
+
+    asset-url: {
+        return [this.data.staticUrl, '_', this.ctx.name, '.', this.ctx.ext].join('');
+    }
+
+}
