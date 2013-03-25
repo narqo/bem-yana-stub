@@ -69,7 +69,7 @@ MAKE.decl('BundleNode', {
         var bundle = this.getPathRel(),
             base = this.__base();
 
-        base.concat(['bemhtml', 'bemtree.xjst']);
+        base.concat(['bemhtml', 'bemtree.xjst', 'node.js']);
 
         return bundle === 'desktop.bundles/test'?
                 base.concat(['client.js', 'node.js']) : base;
