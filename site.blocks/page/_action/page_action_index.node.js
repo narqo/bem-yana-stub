@@ -11,32 +11,26 @@ Yana.View.decl({ block : 'index', base : 'page' }, {
         return promise;
     },
 
+    /**
+     * Мы собираем единый бандл `common.node.js` на все технологии,
+     * поэтому ничего дополнительно загружать не нужно.
+     */
+    _getTemplate : function() {
+        return { BEMTREE : BEMTREE, BEMHTML : BEMHTML };
+    },
+
     _getHtml : function(json) {
         return this._template.BEMHTML.call(json);
     },
 
-    /*
-    _returnJson : function(data) {
-        this.log('%j', data)
-        this._res.statusCode = 200;
-        this._res.setHeader('Content-Type', 'text/json; charset=utf-8');
-        return JSON.stringify(data, null, '  ');
-    },
-    */
-
     render : function(ctx) {
         var bemJsonP = this._getBemjson(ctx);
-//            mode = this._getMode();
 
         return bemJsonP.then(function(json) {
             return JSON.stringify(json, null, '  ');
         });
 
-        if(mode === 'json') {
-            return bemJsonP.then(this._returnJson.bind(this));
-        }
-
-        return bemJsonP.then(this._getHtml.bind(this));
+//        return bemJsonP.then(this._getHtml.bind(this));
     }
 
 });

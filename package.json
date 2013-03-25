@@ -11,6 +11,7 @@
   "dependencies": {
     "inherit": "~1.0.4",
     "vow": "~0.1.10",
+    "node-static": "*",
     "cookie": "~0.0.5"
   },
   "devDependencies": {
@@ -18,7 +19,7 @@
     "supervisor": "~0.5.0"
   },
   "scripts": {
-    "start": "supervisor --watch 'desktop.bundles/index/_index.node.js' 'desktop.bundles/index/_index.node.js'"
+    "start": "supervisor --watch 'desktop.bundles/common/_common.node.js' 'desktop.bundles/common/_common.node.js'"
   },
   "author": "Vladimir Varankin <varankinv@yandex-team.ru> (http://github.com/narqo)",
   "readmeFilename": "README.md",

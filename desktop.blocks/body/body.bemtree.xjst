@@ -3,13 +3,18 @@ block body {
     default: {
 
         return this.doAsync(function() {
-                return 'some async result';
+                return BEM.HANDLER.run('photos', {});
             })
             .then(function(data) {
-                dump(this, '<- after some async function');
+                    dump(this, '<- after some async function');
 
-                return data;
-            }.bind(this));
+                    console.log(data);
+                    return applyCtx(data);
+                }.bind(this),
+                function(err) {
+                    return applyNext(this.ctx.content = err);
+                }.bind(this)
+            );
 
     }
 

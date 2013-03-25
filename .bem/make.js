@@ -2,7 +2,8 @@
 
 require('./nodes');
 
-var environ = require('./environ');
+var PATH = require('path'),
+    environ = require('./environ');
 
 try {
     require(environ.getLibPath('bem-yana', '.bem/nodes/bundle'));
@@ -25,33 +26,31 @@ MAKE.decl('Arch', {
 
 MAKE.decl('BundleNode', {
 
-    getTechs: function() {
-        if(~this.getNodePrefix().indexOf('desktop.bundles')) {
+    getTechs : function() {
+        /*
+        var prefix = this.getNodePrefix();
+        if(~prefix.indexOf('desktop.bundles/appserver')) {
             return [
                 'bemdecl.js',
                 'deps.js',
-//                'i18n',
-                'bemhtml',
-//                'i18n.bemtree.xjst',
-                'bemtree.xjst',
-                'node.js'
+                'app.node.js'
             ];
         }
+        */
 
         return [
-            'bemjson.js',
             'bemdecl.js',
             'deps.js',
             'js',
             'css',
-            'ie.css',
-            'ie6.css',
-            'ie7.css',
-            'ie8.css',
-            'ie9.css',
             'bemhtml',
-            'html'
+            'bemtree.xjst',
+            'node.js'
         ];
+    },
+
+    'create-app.node.js-optimizer-node' : function(tech, sourceNode, bundleNode) {
+        return this['create-node.js-optimizer-node'].apply(this, arguments);
     },
 
     'create-bemtree.xjst-optimizer-node' : function(tech, sourceNode, bundleNode) {
