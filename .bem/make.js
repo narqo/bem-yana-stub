@@ -1,4 +1,4 @@
-/*global MAKE:true */
+/*global MAKE: true, node: true */
 
 require('./nodes');
 
@@ -26,17 +26,33 @@ MAKE.decl('Arch', {
 
 MAKE.decl('BundleNode', {
 
+    getPathRel : function() {
+        return PATH.relative(this.root, this.getPath());
+    },
+
     getTechs : function() {
-        /*
-        var prefix = this.getNodePrefix();
-        if(~prefix.indexOf('desktop.bundles/appserver')) {
+        var bundle = this.getPathRel(),
+            level = this.getLevelPath();
+
+        if(bundle === 'desktop.bundles/appserver') {
             return [
                 'bemdecl.js',
                 'deps.js',
                 'app.node.js'
             ];
         }
-        */
+
+        if(bundle === 'desktop.bundles/test') {
+            return [
+                'bemdecl.js',
+                'deps.js',
+                'css',
+                'client.js',
+                'bemhtml',
+                'bemtree.xjst',
+                'node.js'
+                ];
+        }
 
         return [
             'bemdecl.js',
@@ -49,16 +65,41 @@ MAKE.decl('BundleNode', {
         ];
     },
 
-    'create-app.node.js-optimizer-node' : function(tech, sourceNode, bundleNode) {
-        return this['create-node.js-optimizer-node'].apply(this, arguments);
+    getOptimizerTechs : function() {
+        var bundle = this.getPathRel(),
+            base = this.__base();
+
+        base.concat(['bemhtml', 'bemtree.xjst']);
+
+        return bundle === 'desktop.bundles/test'?
+                base.concat(['client.js', 'node.js']) : base;
     },
 
-    'create-bemtree.xjst-optimizer-node' : function(tech, sourceNode, bundleNode) {
-        return this['create-js-optimizer-node'].apply(this, arguments);
-    },
+    getLevels : function() {
+        var bundle = this.getPathRel(),
+            vendorLevels = [
+                    'bem-bl/blocks-common',
+                    'bem-bl/blocks-desktop',
+                    'bem-yana/common.blocks',
+                    'bem-yana/app.blocks'
+                ]
+                .map(function(path) {
+                    return PATH.resolve(environ.LIB_ROOT, path);
+                });
 
-    'create-bemtree.i18n.xjst-optimizer-node' : function(tech, sourceNode, bundleNode) {
-        return this['create-js-optimizer-node'].apply(this, arguments);
+        if(bundle === 'desktop.bundles/test') {
+            return vendorLevels.concat([
+                    'common.blocks',
+                    'aggregator.blocks',
+                    'site.blocks',
+                    'test.blocks'
+                ].map(function(path) {
+                    return PATH.resolve(environ.PRJ_ROOT, path);
+                }))
+                .concat([PATH.resolve(this.root, PATH.dirname(this.getNodePrefix()), 'blocks')]);
+        }
+
+        return this.__base.apply(this, arguments);
     }
 
 });

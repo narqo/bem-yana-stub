@@ -10,12 +10,14 @@ exports.getConfig = function() {
 
         bundleBuildLevels : [
                 'bem-bl/blocks-common',
-                'bem-yana/app.blocks',
+                'bem-bl/blocks-desktop',
                 'bem-yana/common.blocks',
+                'bem-yana/app.blocks'
             ]
             .map(PATH.resolve.bind(null, environ.LIB_ROOT))
             .concat([
                 'common.blocks',
+                'aggregator.blocks',
                 'site.blocks',
                 'desktop.blocks'
             ].map(PATH.resolve.bind(null, environ.PRJ_ROOT)))
