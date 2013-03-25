@@ -1,0 +1,10 @@
+.b4
+{
+    background: rgba(0, 89, 255, 0.13);
+    padding: 1em;
+    float: left;
+    margin: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 25%;
+}

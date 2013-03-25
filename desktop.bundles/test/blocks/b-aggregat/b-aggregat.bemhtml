@@ -1,0 +1,7 @@
+block b-aggregat {
+
+    js: true
+
+    tag: 'button'
+
+}

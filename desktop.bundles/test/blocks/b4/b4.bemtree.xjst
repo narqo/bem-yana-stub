@@ -1,0 +1,24 @@
+block b4 {
+
+    content: {
+
+        return this.doAsync(function() {
+                return BEM.create('i-handler__request', { _ : 'photos', error : 'bemtree-internal' }).run();
+            })
+            .then(
+                function(photos) {
+                    return applyNext(
+                            this.ctx.content = [
+                                    '(front) b4 got result:',
+                                    { tag : 'br' },
+                                    JSON.stringify(photos, null, 2)
+                                ]);
+                }.bind(this),
+                function(err) {
+                    return applyNext(this.ctx.content = [ '(front) b4 got error:', { tag : 'br' }, err.message ]);
+                }.bind(this)
+            );
+
+    }
+
+}

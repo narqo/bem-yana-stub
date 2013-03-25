@@ -1,0 +1,29 @@
+block b-page {
+
+    content: [
+        {
+            attrs : { style : 'text-align:center;padding:10px 0;' },
+            content : {
+                block : 'b-aggregat',
+                content : 'reinint by client&hellip;'
+            }
+        },
+        {
+            block   : 'b1',
+            content : 'loading&hellip;'
+        },
+        {
+            block   : 'b2',
+            content : 'loading&hellip;'
+        },
+        {
+            block   : 'b3',
+            content : 'loading&hellip;'
+        },
+        {
+            block   : 'b4',
+            content : 'loading&hellip;'
+        }
+    ]
+
+}

@@ -1,0 +1,24 @@
+block b2 {
+
+    content: {
+
+        return this.doAsync(function() {
+                return BEM.create('i-handler__request', { _ : 'comments', param1 : 'val2' }).run();
+            })
+            .then(
+                function(comments) {
+                    return applyNext(
+                            this.ctx.content = [
+                                    '(front) b2 got result:',
+                                    { tag : 'br' },
+                                    JSON.stringify(comments, null, 2)
+                                ]);
+                }.bind(this),
+                function(err) {
+                    return applyNext(this.ctx.content = [ '(front) b2 got error:', { tag : 'br' }, err.message ]);
+                }.bind(this)
+            );
+
+    }
+
+}

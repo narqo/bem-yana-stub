@@ -1,0 +1,7 @@
+block b2 {
+
+    js: true
+
+    tag: 'pre'
+
+}
