@@ -6,6 +6,21 @@ Yana.View.decl('page', {
         this._template = this._getTemplate();
     },
 
+    _createContext : function() {
+        return {
+            req : this._req,
+            res : this._res,
+            pageName : 'My page!',
+            bundleName : 'test', //this._getName(),
+            staticUrl : Yana.Config.param('STATIC_URL')
+        };
+    },
+
+    _getMode : function() {
+        return Yana.Config.param('DEBUG') &&
+            this._req.query.__mode;
+    },
+
     _getTemplatePath : function(name) {
         var path = App.Config.param('BUNDLES_ROOT');
         return require('path').join(path, name, ['_', name, '.node.js'].join(''));
@@ -28,7 +43,7 @@ Yana.View.decl('page', {
     },
 
     render : function(ctx) {
-        App.Logger.debug('å page handler is runnig with ctx');
+        Yana.Logger.debug('å page handler is runnig with ctx');
     }
 
 }, {

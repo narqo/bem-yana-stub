@@ -1,9 +1,17 @@
 Yana.View.decl({ block : 'index', base : 'page' }, {
 
-    _getBemjson : function(ctx) {
+    /**
+     * Мы собираем единый бандл `common.node.js` на все технологии,
+     * поэтому ничего дополнительно загружать не нужно.
+     */
+    _getTemplate : function() {
+        return { bemtree : BEMTREE, bemhtml : BEMHTML };
+    },
+
+    _buildBemjson : function(ctx) {
         var promise = Vow.promise();
 
-        this._template.BEMTREE.call(ctx)
+        this._template.bemtree.call(ctx)
             .then(function(bemjson) {
                 return promise.fulfill(bemjson);
             });
@@ -11,26 +19,24 @@ Yana.View.decl({ block : 'index', base : 'page' }, {
         return promise;
     },
 
-    /**
-     * Мы собираем единый бандл `common.node.js` на все технологии,
-     * поэтому ничего дополнительно загружать не нужно.
-     */
-    _getTemplate : function() {
-        return { BEMTREE : BEMTREE, BEMHTML : BEMHTML };
-    },
-
-    _getHtml : function(json) {
-        return this._template.BEMHTML.call(json);
+    _buildHtml : function(json) {
+        return this._template.bemhtml.call(json);
     },
 
     render : function(ctx) {
-        var bemJsonP = this._getBemjson(ctx);
+        Yana.Logger.debug('Going to render page "%s"', this._getName());
+
+        this._res.writeHead(200, { 'Content-Type' : 'text/html' });
+
+        var bemJsonP = this._buildBemjson(ctx);
 
         return bemJsonP.then(function(json) {
-            return JSON.stringify(json, null, '  ');
-        });
+            if(this._getMode() === 'json') {
+                return Yana.Util.format('<pre>%s</pre>', JSON.stringify(json, null, 2));
+            }
 
-//        return bemJsonP.then(this._getHtml.bind(this));
+            return this._buildHtml(json);
+        }.bind(this));
     }
 
 });
