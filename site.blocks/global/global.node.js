@@ -18,10 +18,15 @@ function main() {
         routes : [
             { rule : '/$', action : 'index' },
             { rule : '/albums', action : 'albums' },
-            { rule : '/albums/{id}', action : 'album' },
-            { rule : '/.+\.(?:ico|css|js)$', action : 'static' }
+            { rule : '/albums/{id}', action : 'album' }
         ]
 
+    });
+
+    Yana.Config.param('routes').push({
+        rule : '/models',
+//        method : 'POST',
+        action : 'provider'
     });
 
     (new Yana.Http).run();

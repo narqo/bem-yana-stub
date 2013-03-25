@@ -2,11 +2,11 @@
     mustDeps : [
         { block : 'config' },
         { block : 'http' },
-        { block : 'logger' }
+        { block : 'logger' },
+        { block : 'util' },
     ],
     shouldDeps : [
         { block : 'page' },
-        { block : 'page', mods : { action : 'index' } },
-        { block : 'view', elem : 'static' }
+        { block : 'page', mods : { action : 'index' } }
     ]
 })
