@@ -1,6 +1,7 @@
 ({
     mustDeps : [
-        { block : 'i-bem', elems : ['util'] },
+        { block : 'i-promise' },
+        { block : 'i-bem' },
         { block : 'i-handler' }
     ]
 })

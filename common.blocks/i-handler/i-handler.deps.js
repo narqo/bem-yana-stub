@@ -1,8 +1,7 @@
 ({
     mustDeps : [
         { block : 'i-promise' },
-        { block : 'i-inherit' },
-        { block : 'i-bem', elems : ['util'] }
+        { block : 'i-bem' }
     ],
     shouldDeps : [
         { elems : ['request', 'response'] }
