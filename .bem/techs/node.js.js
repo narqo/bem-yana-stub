@@ -1,8 +1,7 @@
 var PATH = require('path'),
     BEM = require('bem'),
     environ = require('../environ'),
-    CommonJsMixin = require('./common.js.js').CommonJsMixin,
-    Q = BEM.require('q');
+    CommonJsMixin = require('./common.js.js').CommonJsMixin;
 
 exports.baseTechPath = environ.getLibPath('bem-yana', '.bem/techs/node.js.js');
 
