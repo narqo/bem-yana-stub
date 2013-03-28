@@ -1,0 +1,29 @@
+block b5 {
+
+    content: {
+
+        return this.doAsync(function() {
+            return BEM.create('http-provider', {
+                    url : 'http://api.twitter.com/1/trends/1.json',
+                    allowGzip : true
+                })
+                .run();
+        })
+        .then(
+            function(trends) {
+                return applyNext(
+                        this.ctx.content = [
+                            JSON.stringify(trends, null, 2)
+                        ]
+                    );
+            }.bind(this),
+
+            function(err) {
+                console.log(err.stack);
+                return err.message;
+            }.bind(this)
+        );
+
+    }
+
+}

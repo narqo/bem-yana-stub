@@ -23,6 +23,11 @@ block b-page {
         {
             block   : 'b4',
             content : 'loading&hellip;'
+        },
+        { tag : 'hr' },
+        {
+            block   : 'b5',
+            content : 'loading&hellip;'
         }
     ]
 
