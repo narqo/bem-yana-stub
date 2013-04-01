@@ -144,25 +144,20 @@ BEM.decl({ block : 'http-provider' }, {
                         return promise.reject(new Error(res.statusCode));
                     }
 
-                    var headers = res.headers,
-                        stream;
+                    var buf = '',
+                        headers = res.headers,
+                        zdecoder = getDecoderFromHeaders(headers),
+                        resStream = zdecoder?
+                                res.pipe(new zdecoder()) :
+                                    (res.setEncoding(_t.params.encoding), res);
 
-                    if(headers['content-encoding'] === 'gzip') {
-                        stream = new ZLIB.Gunzip();
-                        res.pipe(stream);
-                    } else {
-                        res.setEncoding(_t.params.encoding);
-                        stream = res;
-                    }
-
-                    var buf = '';
-                    stream
+                    resStream
                         .on('data', function(chunk) {
                             buf += chunk;
                         })
                         .once('end', function() {
                             try {
-                                var dtype = _t._dataType || extractDataTypeFromHeaders(headers);
+                                var dtype = _t._dataType || getDataTypeFromHeaders(headers);
                                 promise.fulfill(processResponse(buf, dtype));
                             }
                             catch(err) {
@@ -204,13 +199,26 @@ BEM.decl({ block : 'http-provider' }, {
 
 });
 
-function extractDataTypeFromHeaders(headers) {
+function getDataTypeFromHeaders(headers) {
     var contentType = headers['content-type'];
     if(contentType.indexOf('json') > -1) {
         return 'json';
     }
 
     return 'text';
+}
+
+function getDecoderFromHeaders(headers) {
+    var encoding = headers['content-encoding'];
+    switch(encoding) {
+
+    case 'gzip':
+        return ZLIB.Gunzip;
+
+    case 'deflate':
+        return ZLIB.Inflate;
+
+    }
 }
 
 function processResponse(data, dataType) {
