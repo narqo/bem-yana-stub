@@ -109,7 +109,7 @@ exports.applyAsync = BEMContext.applyAsync = function() {
     result = ctx.apply();
 
     return Vow.allResolved(ctx.__queue)
-        .then(function() {
+        .always(function() {
             return result;
         });
 };
