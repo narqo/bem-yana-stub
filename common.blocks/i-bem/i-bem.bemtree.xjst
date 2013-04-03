@@ -49,7 +49,7 @@ BEMContext.prototype.extend = function extend(o1, o2) {
 
 BEMContext.prototype.identify = (function() {
     var cnt = 0,
-        id = BEM_.__id = (+new Date()),
+        id = BEM_.__id__ = (+new Date()),
         expando = '__' + id,
         get = function() { return 'uniq' + id + ++cnt; };
     return function(obj, onlyGet) {
