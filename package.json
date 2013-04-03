@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "inherit": "~1.0.4",
-    "vow": "~0.2.0",
+    "vow": "~0.3.0",
     "cookie": "~0.0.5"
   },
   "devDependencies": {
