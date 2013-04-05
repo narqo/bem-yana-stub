@@ -1,8 +1,11 @@
-(function(global, BEM, Vow) {
+modules.define(
+    'i-handler__processor',
+    ['i-bem', 'utils', 'vow-promise'],
+    function(provide, BEM, utils, Vow) {
 
 var concat = Array.prototype.concat;
 
-BEM.decl({ block : 'i-handler__processor', baseBlock : 'i-handler' }, {
+BEM.decl({ block : 'i-handler__processor' }, {
 
     onSetMod : {
         js : {
@@ -128,7 +131,7 @@ BEM.decl({ block : 'i-handler__processor', baseBlock : 'i-handler' }, {
 
         var providerCls = this._getResponseHandlerCls(handler);
         return Vow.promise(
-                    BEM.create(providerCls.getName(), $.extend(params, { processor : this }))
+                    BEM.create(providerCls.getName(), utils.extend(params, { processor : this }))
                     .run()
                 )
                 .then(
@@ -158,4 +161,4 @@ BEM.decl({ block : 'i-handler__processor', baseBlock : 'i-handler' }, {
 
 });
 
-}(this, BEM, Vow));
+});

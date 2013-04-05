@@ -1,4 +1,7 @@
-(function(global, BEM, Vow) {
+modules.define(
+    'i-handler__request',
+    ['i-bem', 'vow-promise', 'utils'],
+    function(provide, BEM, Vow, utils) {
 
 var queuedHandlers = [];
 
@@ -12,7 +15,7 @@ function findQueuedHandler(key) {
 }
 
 
-BEM.decl({ block : 'i-handler__request', baseBlock : 'i-handler' }, {
+BEM.decl({ block : 'i-handler__request' }, {
 
     /**
      * @returns {Promise}
@@ -39,7 +42,7 @@ BEM.decl({ block : 'i-handler__request', baseBlock : 'i-handler' }, {
                 block : this,
                 key   : key
             }) === 1 &&
-                this._.nextTick(this.__self._doRequest, this.__self);
+                utils.nextTick.call(this.__self, this.__self._doRequest);
 
         return this._promise = promise;
     },
@@ -105,4 +108,4 @@ BEM.decl({ block : 'i-handler__request', baseBlock : 'i-handler' }, {
 
 });
 
-}(this, BEM, Vow));
+});

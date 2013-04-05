@@ -1,6 +1,9 @@
-(function(global, BEM, Vow) {
+modules.define(
+    'i-handler__response',
+    ['i-bem', 'utils'],
+    function(provide, BEM, utils) {
 
-BEM.decl({ block : 'i-handler__response', baseBlock : 'i-handler' }, {
+BEM.decl({ block : 'i-handler__response' }, {
 
     onSetMod : {
         js : {
@@ -54,4 +57,4 @@ BEM.decl({ block : 'i-handler__response', baseBlock : 'i-handler' }, {
 
 });
 
-}(this, BEM, Vow));
+});

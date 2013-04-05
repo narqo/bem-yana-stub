@@ -1,4 +1,7 @@
-(function(global, BEM, Vow) {
+modules.define(
+    'i-handler__request',
+    ['i-bem', 'utils'],
+    function(provide, BEM, utils) {
 
 BEM.decl('i-handler__request', {}, {
 
@@ -25,4 +28,4 @@ BEM.decl('i-handler__request', {}, {
 
 });
 
-}(this, BEM, Vow));
+});
