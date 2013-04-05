@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 0.2.2
+ * @version 0.3.0
  */
 
 (function(global) {
@@ -19,6 +19,7 @@ var Promise = function(val) {
 
     this._fulfilledCallbacks = [];
     this._rejectedCallbacks = [];
+    this._progressCallbacks = [];
 };
 
 Promise.prototype = {
@@ -46,8 +47,8 @@ Promise.prototype = {
         this._isFulfilled = true;
         this._res = val;
 
-        this._callCallbacks(this._fulfilledCallbacks);
-        this._fulfilledCallbacks = this._rejectedCallbacks = undef;
+        this._callCallbacks(this._fulfilledCallbacks, val);
+        this._fulfilledCallbacks = this._rejectedCallbacks = this._progressCallbacks = undef;
     },
 
     reject : function(err) {
@@ -58,27 +59,37 @@ Promise.prototype = {
         this._isRejected = true;
         this._res = err;
 
-        this._callCallbacks(this._rejectedCallbacks);
-        this._fulfilledCallbacks = this._rejectedCallbacks = undef;
+        this._callCallbacks(this._rejectedCallbacks, err);
+        this._fulfilledCallbacks = this._rejectedCallbacks = this._progressCallbacks = undef;
     },
 
-    then : function(onFulfilled, onRejected) {
+    notify : function(val) {
+        if(this.isResolved()) {
+            return;
+        }
+
+        this._callCallbacks(this._progressCallbacks, val);
+    },
+
+    then : function(onFulfilled, onRejected, onProgress) {
         var promise = new Promise(),
             cb;
 
         if(!this._isRejected) {
             cb = { promise : promise, fn : onFulfilled };
             this._isFulfilled?
-                this._callCallbacks([cb]) :
+                this._callCallbacks([cb], this._res) :
                 this._fulfilledCallbacks.push(cb);
         }
 
         if(!this._isFulfilled) {
             cb = { promise : promise, fn : onRejected };
             this._isRejected?
-                this._callCallbacks([cb]) :
+                this._callCallbacks([cb], this._res) :
                 this._rejectedCallbacks.push(cb);
         }
+
+        this.isResolved() || this._progressCallbacks.push({ promise : promise, fn : onProgress });
 
         return promise;
     },
@@ -90,10 +101,14 @@ Promise.prototype = {
     always : function(onResolved) {
         var _this = this,
             cb = function() {
-                onResolved(_this);
+                return onResolved(_this);
             };
 
         return this.then(cb, cb);
+    },
+
+    progress : function(onProgress) {
+        return this.then(undef, undef, onProgress);
     },
 
     spread : function(onFulfilled, onRejected) {
@@ -108,6 +123,18 @@ Promise.prototype = {
         this.fail(throwException);
     },
 
+    delay : function(delay) {
+        return this.then(function(val) {
+            var promise = new Promise();
+            setTimeout(
+                function() {
+                    promise.fulfill(val);
+                },
+                delay);
+            return promise;
+        });
+    },
+
     timeout : function(timeout) {
         var promise = new Promise(),
             timer = setTimeout(
@@ -116,15 +143,10 @@ Promise.prototype = {
                 },
                 timeout);
 
-        this.then(
-            function(res) {
-                clearTimeout(timer);
-                promise.fulfill(res);
-            },
-            function(err) {
-                clearTimeout(timer);
-                promise.reject(err);
-            });
+        promise.sync(this);
+        promise.always(function() {
+            clearTimeout(timer);
+        });
 
         return promise;
     },
@@ -140,13 +162,13 @@ Promise.prototype = {
             });
     },
 
-    _callCallbacks : function(callbacks) {
+    _callCallbacks : function(callbacks, arg) {
         var len = callbacks.length;
         if(!len) {
             return;
         }
 
-        var arg = this._res,
+        var isResolved = this.isResolved(),
             isFulfilled = this.isFulfilled();
 
         nextTick(function() {
@@ -166,22 +188,29 @@ Promise.prototype = {
                         continue;
                     }
 
-                    Vow.isPromise(res)?
-                        (function(promise) {
-                            res.then(
-                                function(val) {
-                                    promise.fulfill(val);
-                                },
-                                function(err) {
-                                    promise.reject(err);
-                                })
-                        })(promise) :
-                        promise.fulfill(res);
+                    if(isResolved) {
+                        Vow.isPromise(res)?
+                            (function(promise) {
+                                res.then(
+                                    function(val) {
+                                        promise.fulfill(val);
+                                    },
+                                    function(err) {
+                                        promise.reject(err);
+                                    })
+                            })(promise) :
+                            promise.fulfill(res);
+                    }
+                    else {
+                        promise.notify(res);
+                    }
                 }
                 else {
-                    isFulfilled?
-                        promise.fulfill(arg) :
-                        promise.reject(arg);
+                    isResolved?
+                        isFulfilled?
+                            promise.fulfill(arg) :
+                            promise.reject(arg) :
+                        promise.notify(arg);
                 }
             }
         });
@@ -197,8 +226,8 @@ var Vow = {
             new Promise();
     },
 
-    when : function(obj, onFulfilled, onRejected) {
-        return this.promise(obj).then(onFulfilled, onRejected);
+    when : function(obj, onFulfilled, onRejected, onProgress) {
+        return this.promise(obj).then(onFulfilled, onRejected, onProgress);
     },
 
     fail : function(obj, onRejected) {
@@ -207,6 +236,10 @@ var Vow = {
 
     always : function(obj, onResolved) {
         return this.promise(obj).always(onResolved);
+    },
+
+    progress : function(obj, onProgress) {
+        return this.promise(obj).progress(onProgress);
     },
 
     spread : function(obj, onFulfilled, onRejected) {
@@ -352,61 +385,85 @@ var Vow = {
         return resPromise;
     },
 
+    delay : function(val, timeout) {
+        return this.promise(val).delay(timeout);
+    },
+
     timeout : function(val, timeout) {
         return this.promise(val).timeout(timeout);
     }
 };
 
 var undef,
-    nextTick = typeof process === 'object'? // nodejs
-        process.nextTick :
-        global.setImmediate? // ie10
-            global.setImmediate :
-            global.postMessage? // modern browsers
-                (function() {
-                    var msg = '__promise' + +new Date,
-                        onMessage = function(e) {
-                            if(e.data === msg) {
-                                e.stopPropagation && e.stopPropagation();
-                                callFns();
-                            }
-                        };
-
-                    global.addEventListener?
-                        global.addEventListener('message', onMessage, true) :
-                        global.attachEvent('onmessage', onMessage);
-
-                    return function(fn) {
-                        fns.push(fn) === 1 && global.postMessage(msg, '*');
-                    };
-                })() :
-                'onreadystatechange' in global.document.createElement('script')? // old IE
-                    (function() {
-                        var createScript = function() {
-                                var script = document.createElement('script');
-                                script.onreadystatechange = function() {
-                                    script.parentNode.removeChild(script);
-                                    script = script.onreadystatechange = null;
-                                    callFns();
-                                };
-                                (global.document.documentElement || global.document.body).appendChild(script);
-                            };
-
-                        return function(fn) {
-                            fns.push(fn) === 1 && createScript();
-                        };
-                    })() :
-                    function(fn) { // old browsers
-                        setTimeout(fn, 0);
-                    },
-    fns = [],
-    callFns = function() {
-        var fnsToCall = fns, i = 0, len = fns.length;
-        fns = [];
-        while(i < len) {
-            fnsToCall[i++]();
+    nextTick = (function() {
+        if(typeof process === 'object') { // nodejs
+            return process.nextTick;
         }
-    },
+
+        if(global.setImmediate) { // ie10
+            return global.setImmediate;
+        }
+
+        var fns = [],
+            callFns = function() {
+                var fnsToCall = fns, i = 0, len = fns.length;
+                fns = [];
+                while(i < len) {
+                    fnsToCall[i++]();
+                }
+            };
+
+        if(global.postMessage) { // modern browsers
+            var isPostMessageAsync = true;
+            if(global.attachEvent) {
+                var checkAsync = function() {
+                        isPostMessageAsync = false;
+                    };
+                global.attachEvent('onmessage', checkAsync);
+                global.postMessage('__checkAsync', '*');
+                global.detachEvent('onmessage', checkAsync);
+            }
+
+            if(isPostMessageAsync) {
+                var msg = '__promise' + +new Date,
+                    onMessage = function(e) {
+                        if(e.data === msg) {
+                            e.stopPropagation && e.stopPropagation();
+                            callFns();
+                        }
+                    };
+
+                global.addEventListener?
+                    global.addEventListener('message', onMessage, true) :
+                    global.attachEvent('onmessage', onMessage);
+
+                return function(fn) {
+                    fns.push(fn) === 1 && global.postMessage(msg, '*');
+                };
+            }
+        }
+
+        var doc = global.document;
+        if('onreadystatechange' in doc.createElement('script')) { // ie6-ie8
+            var createScript = function() {
+                    var script = doc.createElement('script');
+                    script.onreadystatechange = function() {
+                        script.parentNode.removeChild(script);
+                        script = script.onreadystatechange = null;
+                        callFns();
+                };
+                (doc.documentElement || doc.body).appendChild(script);
+            };
+
+            return function(fn) {
+                fns.push(fn) === 1 && createScript();
+            };
+        }
+
+        return function(fn) { // old browsers
+            setTimeout(fn, 0);
+        };
+    })(),
     throwException = function(e) {
         nextTick(function() {
             throw e;
@@ -449,3 +506,7 @@ else {
 }
 
 })(this);
+
+modules.define('vow-promise', function(provide) {
+    provide(Vow);
+});
