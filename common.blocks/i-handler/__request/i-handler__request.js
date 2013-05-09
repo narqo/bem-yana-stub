@@ -7,7 +7,7 @@ BEM.decl('i-handler__request', {}, {
      * @override
      */
     _doRequest : function() {
-        var queuedHandlers = this._queuedHandlers;
+        var queuedHandlers = this._getQueuedHandlers();
 
         $.ajax({
                 url  : this.getProviderUrl(),
@@ -21,8 +21,6 @@ BEM.decl('i-handler__request', {}, {
             }).then(
                 this._onRequestDone.bind(this, queuedHandlers),
                 this._onRequestFailed.bind(this, queuedHandlers));
-
-        queuedHandlers = this._queuedHandlers = [];
     },
 
     /**

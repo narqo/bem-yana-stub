@@ -11,6 +11,10 @@ function findQueuedHandler(key) {
     }
 }
 
+function enqueueHandler(handler) {
+    return queuedHandlers.push(handler) === 1;
+}
+
 
 BEM.decl({ block : 'i-handler__request', baseBlock : 'i-handler' }, {
 
@@ -34,12 +38,11 @@ BEM.decl({ block : 'i-handler__request', baseBlock : 'i-handler' }, {
         }
 
         var promise = Vow.promise();
-        queuedHandlers.push(
+        enqueueHandler(
             {
                 block : this,
                 key   : key
-            }) === 1 &&
-                this._.nextTick(this.__self._doRequest, this.__self);
+            }) && this._.nextTick(this.__self._doRequest, this.__self);
 
         return this._promise = promise;
     },
@@ -79,7 +82,11 @@ BEM.decl({ block : 'i-handler__request', baseBlock : 'i-handler' }, {
 
 }, {
 
-    _queuedHandlers : queuedHandlers,
+    _getQueuedHandlers : function() {
+        var queue = queuedHandler;
+        queuedHandler = [];
+        return queue;
+    },
 
     /**
      * @protected
