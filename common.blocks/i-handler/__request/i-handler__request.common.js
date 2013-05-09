@@ -83,8 +83,8 @@ BEM.decl({ block : 'i-handler__request', baseBlock : 'i-handler' }, {
 }, {
 
     _getQueuedHandlers : function() {
-        var queue = queuedHandler;
-        queuedHandler = [];
+        var queue = queuedHandlers;
+        queuedHandlers = [];
         return queue;
     },
 
