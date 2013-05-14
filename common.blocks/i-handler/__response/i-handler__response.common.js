@@ -34,7 +34,7 @@ BEM.decl({ block : 'i-handler__response', baseBlock : 'i-handler' }, {
         this._processor.releaseHandler(handler, this.__self.getName());
     },
 
-    _getDefaultParams : function() {
+    getDefaultParams : function() {
         return {};
     }
 
