@@ -8,7 +8,7 @@ exports.baseTechName = 'bemhtml';
 exports.techMixin = {
 
     getSuffixes : function() {
-        return ['common.js', 'bemtree.xjst'];
+        return ['bemtree.xjst'];
     },
 
     getBuildSuffixes : function() {
@@ -48,7 +48,7 @@ exports.techMixin = {
 
         // FIXME: ugly
         var bemtreeAsync = bemtree.replace(/xjst\.apply\.call\(([^,]+?)\);/m,
-                'xjst.applyAsync.call($1,options.callback);');
+                'xjst.applyAsync.call($1);');
 
         return [
 //            'var main = function(data) {',

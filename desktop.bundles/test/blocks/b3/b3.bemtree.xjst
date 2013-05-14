@@ -1,0 +1,24 @@
+block b3 {
+
+    content: {
+
+        return this.doAsync(function() {
+                return BEM.create('i-handler__request', { _ : 'photos', param1 : 'val1' }).run();
+            })
+            .then(
+                function(photos) {
+                    return applyNext(
+                            this.ctx.content = [
+                                    '(front) b3 got result:',
+                                    { tag : 'br' },
+                                    JSON.stringify(photos, null, 2)
+                                ]);
+                }.bind(this),
+                function(err) {
+                    return applyNext(this.ctx.content = [ '(front) b3 got error:', { tag : 'br' }, err.message]);
+                }.bind(this)
+            );
+
+    }
+
+}

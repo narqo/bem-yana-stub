@@ -1,4 +1,4 @@
-this._start, !this.data {
+this._mode === '', !this.data {
 
     default: {
         return applyCtx(

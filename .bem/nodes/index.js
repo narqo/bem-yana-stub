@@ -1,1 +1,2 @@
 require('./arch');
+require('./bundle');

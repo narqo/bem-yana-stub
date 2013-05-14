@@ -1,0 +1,12 @@
+this._mode === '', !this.data: {
+    return apply(
+            this.data = this.ctx.pop(),
+            this.ctx = [
+                { block : 'i-global' },
+                { block : 'b-page' }
+            ]);
+}
+
+block i-global {
+    default: false
+}

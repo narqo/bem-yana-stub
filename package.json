@@ -18,7 +18,7 @@
     "nodemon": "~0.7.3"
   },
   "scripts": {
-    "start": "nodemon -w desktop.bundles/ -e '.node.js|.bemtree.xjst.js|.bemhtml.js' -d 1 ./desktop.bundles/index/_index.node.js"
+    "start": "nodemon -w desktop.bundles/ -e '.node.js|.bemtree.xjst.js|.bemhtml.js' -d 1 ./desktop.bundles/test/_test.node.js"
   },
   "author": "Vladimir Varankin <varankinv@yandex-team.ru> (http://github.com/narqo)",
   "readmeFilename": "README.md",
