@@ -48,6 +48,14 @@ BEM.decl({ block : 'i-handler__request', baseBlock : 'i-handler' }, {
     },
 
     /**
+     * @returns {Object} Ajax request
+     */
+    abortRequest: function() {
+        this.__self._ajaxRequest.abort();
+        return this.__self._ajaxRequest;
+    },
+
+    /**
      * @returns {String}
      */
     getKey : function() {

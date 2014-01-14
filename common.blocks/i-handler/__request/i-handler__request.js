@@ -9,7 +9,7 @@ BEM.decl('i-handler__request', {}, {
     _doRequest : function() {
         var queuedHandlers = this._getQueuedHandlers();
 
-        $.ajax({
+        this._ajaxRequest = $.ajax({
                 url  : this.getProviderUrl(),
                 type : 'POST',
                 data : {
