@@ -51,12 +51,8 @@ BEM.decl({ block : 'i-handler__request', baseBlock : 'i-handler' }, {
      * @returns {Object} Ajax request
      */
     abortRequest: function() {
-        var self = this.__self;
-
-        self._ajaxRequest.abort();
-        self._onRequestFailed.bind(self, self._getQueuedHandlers());
-
-        return self._ajaxRequest;
+        this.__self._ajaxRequest.abort();
+        return this.__self._ajaxRequest;
     },
 
     /**
